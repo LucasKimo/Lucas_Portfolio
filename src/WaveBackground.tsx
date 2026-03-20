@@ -6,126 +6,170 @@ interface WaveBackgroundProps {
   frequency?: number;
   speed?: number;
   opacity?: number;
+  quality?: number;
+  fps?: number;
+}
+
+const VERT = `
+  attribute vec2 a_position;
+  varying vec2 v_uv;
+  void main() {
+    v_uv = a_position * 0.5 + 0.5;
+    v_uv.y = 1.0 - v_uv.y;
+    gl_Position = vec4(a_position, 0.0, 1.0);
+  }
+`;
+
+const FRAG = `
+  precision mediump float;
+  uniform sampler2D u_image;
+  uniform float u_time;
+  uniform float u_amplitude;
+  uniform float u_frequency;
+  varying vec2 v_uv;
+
+  void main() {
+    vec2 uv = v_uv;
+
+    float dx =
+      sin(uv.y * u_frequency * 800.0 + u_time * 1.1) * u_amplitude +
+      sin(uv.y * u_frequency * 420.0 + uv.x * u_frequency * 250.0 + u_time * 0.7) * (u_amplitude * 0.5);
+
+    float dy =
+      cos(uv.x * u_frequency * 800.0 + u_time * 0.9) * u_amplitude * 0.7 +
+      cos(uv.x * u_frequency * 376.0 + uv.y * u_frequency * 224.0 + u_time * 0.55) * (u_amplitude * 0.4);
+
+    uv.x += dx;
+    uv.y += dy;
+
+    uv = clamp(uv, 0.0, 1.0);
+    gl_FragColor = texture2D(u_image, uv);
+  }
+`;
+
+function compileShader(gl: WebGLRenderingContext, type: number, src: string) {
+  const shader = gl.createShader(type)!;
+  gl.shaderSource(shader, src);
+  gl.compileShader(shader);
+  return shader;
 }
 
 export default function WaveBackground({
   src,
-  amplitude = 18,
+  amplitude = 0.012,
   frequency = 0.012,
   speed = 0.6,
   opacity = 0.92,
+  quality = 0.5,
+  fps = 30,
 }: WaveBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
-  const imgRef = useRef<HTMLImageElement | null>(null);
-  const startRef = useRef<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+
+    const gl = canvas.getContext("webgl", {
+      antialias: false,
+      depth: false,
+      stencil: false,
+      preserveDrawingBuffer: false,
+      powerPreference: "high-performance",
+    });
+    if (!gl) return;
+
+    const canvasEl: HTMLCanvasElement = canvas;
+    const glCtx: WebGLRenderingContext = gl;
+    const renderScale = Math.min(Math.max(quality, 0.25), 1);
+    const frameDuration = 1000 / Math.max(fps, 1);
 
     function resize() {
-      if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, renderScale);
+      canvasEl.width = Math.floor(window.innerWidth * dpr);
+      canvasEl.height = Math.floor(window.innerHeight * dpr);
+      glCtx.viewport(0, 0, canvasEl.width, canvasEl.height);
     }
+
     resize();
     window.addEventListener("resize", resize);
+
+    const vert = compileShader(glCtx, glCtx.VERTEX_SHADER, VERT);
+    const frag = compileShader(glCtx, glCtx.FRAGMENT_SHADER, FRAG);
+    const prog = glCtx.createProgram()!;
+    glCtx.attachShader(prog, vert);
+    glCtx.attachShader(prog, frag);
+    glCtx.linkProgram(prog);
+    glCtx.useProgram(prog);
+
+    const buf = glCtx.createBuffer();
+    glCtx.bindBuffer(glCtx.ARRAY_BUFFER, buf);
+    glCtx.bufferData(
+      glCtx.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+      glCtx.STATIC_DRAW
+    );
+    const aPos = glCtx.getAttribLocation(prog, "a_position");
+    glCtx.enableVertexAttribArray(aPos);
+    glCtx.vertexAttribPointer(aPos, 2, glCtx.FLOAT, false, 0, 0);
+
+    const uTime = glCtx.getUniformLocation(prog, "u_time");
+    const uAmp = glCtx.getUniformLocation(prog, "u_amplitude");
+    const uFreq = glCtx.getUniformLocation(prog, "u_frequency");
+    glCtx.uniform1f(uAmp, amplitude);
+    glCtx.uniform1f(uFreq, frequency);
+
+    const texture = glCtx.createTexture();
+    glCtx.bindTexture(glCtx.TEXTURE_2D, texture);
+    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_WRAP_S, glCtx.CLAMP_TO_EDGE);
+    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_WRAP_T, glCtx.CLAMP_TO_EDGE);
+    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_MIN_FILTER, glCtx.LINEAR);
+    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_MAG_FILTER, glCtx.LINEAR);
 
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = src;
-    imgRef.current = img;
 
-    const offscreen = document.createElement("canvas");
-    const offCtx = offscreen.getContext("2d");
+    let startTime: number | null = null;
+    let lastFrameTime = 0;
+    let loaded = false;
 
     img.onload = () => {
-      startRef.current = null;
-      cancelAnimationFrame(rafRef.current);
+      glCtx.bindTexture(glCtx.TEXTURE_2D, texture);
+      glCtx.texImage2D(glCtx.TEXTURE_2D, 0, glCtx.RGBA, glCtx.RGBA, glCtx.UNSIGNED_BYTE, img);
+      loaded = true;
       rafRef.current = requestAnimationFrame(draw);
     };
 
-    function draw(timestamp: number) {
-      if (!canvas || !ctx || !offCtx) return;
-      if (!startRef.current) startRef.current = timestamp;
-      const t = ((timestamp - startRef.current) / 1000) * speed;
-
-      const W = canvas.width;
-      const H = canvas.height;
-
-      if (offscreen.width !== W || offscreen.height !== H) {
-        offscreen.width = W;
-        offscreen.height = H;
+    function draw(ts: number) {
+      if (!loaded) return;
+      if (document.hidden) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
+      }
+      if (!startTime) startTime = ts;
+      if (ts - lastFrameTime < frameDuration) {
+        rafRef.current = requestAnimationFrame(draw);
+        return;
       }
 
-      const img = imgRef.current;
-      if (!img) return;
-
-      const scale = Math.max(W / img.naturalWidth, H / img.naturalHeight);
-      const iw = img.naturalWidth * scale;
-      const ih = img.naturalHeight * scale;
-      const ix = (W - iw) / 2;
-      const iy = (H - ih) / 2;
-      offCtx.drawImage(img, ix, iy, iw, ih);
-
-      const srcData = offCtx.getImageData(0, 0, W, H);
-      const dstData = ctx.createImageData(W, H);
-
-      const srcPixels = srcData.data;
-      const dstPixels = dstData.data;
-
-      for (let y = 0; y < H; y++) {
-        for (let x = 0; x < W; x++) {
-          const dx =
-            Math.sin(y * frequency + t * 1.1) * amplitude +
-            Math.sin(y * frequency * 0.53 + x * frequency * 0.31 + t * 0.7) *
-              (amplitude * 0.5);
-
-          const dy =
-            Math.cos(x * frequency + t * 0.9) * amplitude * 0.7 +
-            Math.cos(x * frequency * 0.47 + y * frequency * 0.28 + t * 0.55) *
-              (amplitude * 0.4);
-
-          const sx = Math.min(Math.max(x + dx, 0), W - 1);
-          const sy = Math.min(Math.max(y + dy, 0), H - 1);
-
-          const x0 = Math.floor(sx);
-          const y0 = Math.floor(sy);
-          const x1 = Math.min(x0 + 1, W - 1);
-          const y1 = Math.min(y0 + 1, H - 1);
-          const tx = sx - x0;
-          const ty = sy - y0;
-
-          const i00 = (y0 * W + x0) * 4;
-          const i10 = (y0 * W + x1) * 4;
-          const i01 = (y1 * W + x0) * 4;
-          const i11 = (y1 * W + x1) * 4;
-          const di = (y * W + x) * 4;
-
-          for (let c = 0; c < 3; c++) {
-            dstPixels[di + c] = Math.round(
-              srcPixels[i00 + c] * (1 - tx) * (1 - ty) +
-                srcPixels[i10 + c] * tx * (1 - ty) +
-                srcPixels[i01 + c] * (1 - tx) * ty +
-                srcPixels[i11 + c] * tx * ty
-            );
-          }
-          dstPixels[di + 3] = 255;
-        }
-      }
-
-      ctx.putImageData(dstData, 0, 0);
+      lastFrameTime = ts;
+      const t = ((ts - startTime) / 1000) * speed;
+      glCtx.uniform1f(uTime, t);
+      glCtx.drawArrays(glCtx.TRIANGLE_STRIP, 0, 4);
       rafRef.current = requestAnimationFrame(draw);
     }
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
+      glCtx.deleteBuffer(buf);
+      glCtx.deleteShader(vert);
+      glCtx.deleteShader(frag);
+      glCtx.deleteProgram(prog);
+      glCtx.deleteTexture(texture);
     };
-  }, [src, amplitude, frequency, speed]);
+  }, [src, amplitude, frequency, speed, quality, fps]);
 
   return (
     <canvas
