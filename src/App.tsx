@@ -1,100 +1,90 @@
-import { ArrowLeft, BriefcaseBusiness, FileText, Github, Linkedin } from "lucide-react";
-import { useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 
-type LinkItem = {
-  href: string;
-  label: string;
-  icon: typeof FileText;
-};
+const navigationItems = ["Projects", "Archive", "About", "Contact"];
 
-const primaryLinks: LinkItem[] = [
-  {
-    href: "../public/resume.pdf",
-    label: "Resume",
-    icon: FileText,
-  },
+const socialLinks = [
   {
     href: "https://github.com/LucasKimo",
     label: "GitHub",
-    icon: Github
   },
   {
     href: "https://www.linkedin.com/in/lucas-eunsu-kim",
     label: "LinkedIn",
-    icon: Linkedin
-  }
+  },
+  {
+    href: "/resume.pdf",
+    label: "Resume",
+  },
 ];
 
-const petals = Array.from({ length: 18 }, (_, index) => index);
-const fireflies = Array.from({ length: 12 }, (_, index) => index);
-
 export default function App() {
-  const [showProjectPage, setShowProjectPage] = useState(false);
-
   return (
-    <main className="page-shell">
-      <div className="firefly-field" aria-hidden="true">
-        {fireflies.map((firefly) => (
-          <span
-            key={firefly}
-            className={`firefly firefly-${firefly + 1}`}
-          />
-        ))}
-      </div>
+    <main className="portfolio-shell">
+      <div className="background-orb orb-left" aria-hidden="true" />
+      <div className="background-orb orb-top" aria-hidden="true" />
+      <div className="background-orb orb-right" aria-hidden="true" />
+      <div className="background-grid" aria-hidden="true" />
 
-      <div className="petal-field" aria-hidden="true">
-        {petals.map((petal) => (
-          <span
-            key={petal}
-            className={`petal petal-${petal + 1}`}
-          />
-        ))}
-      </div>
+      <header className="topbar">
+        <a className="brand-mark" href="#home" aria-label="Lucas Kim home">
+          LUCAS KIM
+        </a>
 
-      {showProjectPage ? (
-        <section className="project-page">
-          <h1>Project</h1>
-          <button
-            className="profile-link profile-button"
-            type="button"
-            onClick={() => setShowProjectPage(false)}
+        <nav className="main-nav" aria-label="Primary">
+          {navigationItems.map((item) => (
+            <a key={item} href={`#${item.toLowerCase()}`}>
+              {item}
+            </a>
+          ))}
+        </nav>
+
+        <div className="topbar-actions">
+          <a className="locale-switch" href="#contact">
+            EN
+          </a>
+          <a className="contact-pill" href="mailto:lucaseunsu.kim@gmail.com">
+            Contact Me
+          </a>
+          <a
+            className="round-button"
+            href="mailto:lucaseunsu.kim@gmail.com"
+            aria-label="Send an email"
           >
-            <ArrowLeft aria-hidden="true" size={18} strokeWidth={1.75} />
-            <span>Home</span>
-          </button>
-        </section>
-      ) : (
-        <section className="hero-card">
-          <h1>Lucas Kim</h1>
-          <p className="subtitle">
-            # Curious Software Engineer
-          </p>
+            <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2} />
+          </a>
+        </div>
+      </header>
 
-          <nav className="link-row" aria-label="Profile links">
-            {primaryLinks.map(({ href, label, icon: Icon }) => (
+      <section className="hero-layout" id="home">
+        <div className="hero-copy-block">
+          <p className="eyebrow">Software engineer based in Brisbane</p>
+          <p className="hero-statement">
+            Transforming ideas into polished digital products. Building calm,
+            reliable experiences that people actually enjoy using.
+          </p>
+          <div className="hero-links" aria-label="Profile links">
+            {socialLinks.map(({ href, label }) => (
               <a
                 key={label}
-                className="profile-link"
+                className="text-link"
                 href={href}
                 target={href.startsWith("http") ? "_blank" : undefined}
                 rel={href.startsWith("http") ? "noreferrer" : undefined}
               >
-                <Icon aria-hidden="true" size={18} strokeWidth={1.75} />
                 <span>{label}</span>
+                <ArrowUpRight aria-hidden="true" size={16} strokeWidth={2} />
               </a>
             ))}
+          </div>
+        </div>
 
-            <button
-              className="profile-link profile-button"
-              type="button"
-              onClick={() => setShowProjectPage(true)}
-            >
-              <BriefcaseBusiness aria-hidden="true" size={18} strokeWidth={1.75} />
-              <span>Project</span>
-            </button>
-          </nav>
-        </section>
-      )}
+        <div className="name-lockup" aria-label="Lucas Kim portfolio">
+          <h1>
+            <span className="name-line">LUCAS</span>
+            <span className="name-line">KIM</span>
+          </h1>
+        </div>
+      </section>
     </main>
   );
 }
