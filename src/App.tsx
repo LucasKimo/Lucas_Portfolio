@@ -1,7 +1,7 @@
 import { ArrowUpRight } from "lucide-react";
+import WaveBackground from "./WaveBackground";
 
 const navigationItems = ["Projects", "Archive", "About", "Contact"];
-
 const socialLinks = [
   {
     href: "https://github.com/LucasKimo",
@@ -20,16 +20,12 @@ const socialLinks = [
 export default function App() {
   return (
     <main className="portfolio-shell">
-      <div className="background-orb orb-left" aria-hidden="true" />
-      <div className="background-orb orb-top" aria-hidden="true" />
-      <div className="background-orb orb-right" aria-hidden="true" />
-      <div className="background-grid" aria-hidden="true" />
+      <WaveBackground src="/background.png" />
 
       <header className="topbar">
         <a className="brand-mark" href="#home" aria-label="Lucas Kim home">
           LUCAS KIM
         </a>
-
         <nav className="main-nav" aria-label="Primary">
           {navigationItems.map((item) => (
             <a key={item} href={`#${item.toLowerCase()}`}>
@@ -37,7 +33,6 @@ export default function App() {
             </a>
           ))}
         </nav>
-
         <div className="topbar-actions">
           <a className="locale-switch" href="#contact">
             EN
@@ -54,7 +49,6 @@ export default function App() {
           </a>
         </div>
       </header>
-
       <section className="hero-layout" id="home">
         <div className="hero-copy-block">
           <p className="eyebrow">Software engineer based in Brisbane</p>
@@ -77,7 +71,6 @@ export default function App() {
             ))}
           </div>
         </div>
-
         <div className="name-lockup" aria-label="Lucas Kim portfolio">
           <h1>
             <span className="name-line">LUCAS</span>
@@ -85,6 +78,7 @@ export default function App() {
           </h1>
         </div>
       </section>
+      
     </main>
   );
 }
