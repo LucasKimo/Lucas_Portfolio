@@ -6,8 +6,6 @@ interface WaveBackgroundProps {
   frequency?: number;
   speed?: number;
   opacity?: number;
-  quality?: number;
-  fps?: number;
 }
 
 const VERT = `
@@ -54,14 +52,14 @@ function compileShader(gl: WebGLRenderingContext, type: number, src: string) {
   return shader;
 }
 
+const MAX_DPR = 0.5;
+
 export default function WaveBackground({
   src,
   amplitude = 0.012,
   frequency = 0.012,
   speed = 0.6,
   opacity = 0.92,
-  quality = 0.5,
-  fps = 30,
 }: WaveBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
@@ -70,106 +68,81 @@ export default function WaveBackground({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = canvas.getContext("webgl", {
-      antialias: false,
-      depth: false,
-      stencil: false,
-      preserveDrawingBuffer: false,
-      powerPreference: "high-performance",
-    });
+    const gl = canvas.getContext("webgl");
     if (!gl) return;
 
-    const canvasEl: HTMLCanvasElement = canvas;
-    const glCtx: WebGLRenderingContext = gl;
-    const renderScale = Math.min(Math.max(quality, 0.25), 1);
-    const frameDuration = 1000 / Math.max(fps, 1);
-
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, renderScale);
-      canvasEl.width = Math.floor(window.innerWidth * dpr);
-      canvasEl.height = Math.floor(window.innerHeight * dpr);
-      glCtx.viewport(0, 0, canvasEl.width, canvasEl.height);
+      if (!canvas || !gl) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
     }
-
     resize();
     window.addEventListener("resize", resize);
 
-    const vert = compileShader(glCtx, glCtx.VERTEX_SHADER, VERT);
-    const frag = compileShader(glCtx, glCtx.FRAGMENT_SHADER, FRAG);
-    const prog = glCtx.createProgram()!;
-    glCtx.attachShader(prog, vert);
-    glCtx.attachShader(prog, frag);
-    glCtx.linkProgram(prog);
-    glCtx.useProgram(prog);
+    const vert = compileShader(gl, gl.VERTEX_SHADER, VERT);
+    const frag = compileShader(gl, gl.FRAGMENT_SHADER, FRAG);
+    const prog = gl.createProgram()!;
+    gl.attachShader(prog, vert);
+    gl.attachShader(prog, frag);
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
 
-    const buf = glCtx.createBuffer();
-    glCtx.bindBuffer(glCtx.ARRAY_BUFFER, buf);
-    glCtx.bufferData(
-      glCtx.ARRAY_BUFFER,
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
       new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
-      glCtx.STATIC_DRAW
+      gl.STATIC_DRAW
     );
-    const aPos = glCtx.getAttribLocation(prog, "a_position");
-    glCtx.enableVertexAttribArray(aPos);
-    glCtx.vertexAttribPointer(aPos, 2, glCtx.FLOAT, false, 0, 0);
+    const aPos = gl.getAttribLocation(prog, "a_position");
+    gl.enableVertexAttribArray(aPos);
+    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-    const uTime = glCtx.getUniformLocation(prog, "u_time");
-    const uAmp = glCtx.getUniformLocation(prog, "u_amplitude");
-    const uFreq = glCtx.getUniformLocation(prog, "u_frequency");
-    glCtx.uniform1f(uAmp, amplitude);
-    glCtx.uniform1f(uFreq, frequency);
+    const uTime = gl.getUniformLocation(prog, "u_time");
+    const uAmp = gl.getUniformLocation(prog, "u_amplitude");
+    const uFreq = gl.getUniformLocation(prog, "u_frequency");
+    gl.uniform1f(uAmp, amplitude);
+    gl.uniform1f(uFreq, frequency);
 
-    const texture = glCtx.createTexture();
-    glCtx.bindTexture(glCtx.TEXTURE_2D, texture);
-    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_WRAP_S, glCtx.CLAMP_TO_EDGE);
-    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_WRAP_T, glCtx.CLAMP_TO_EDGE);
-    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_MIN_FILTER, glCtx.LINEAR);
-    glCtx.texParameteri(glCtx.TEXTURE_2D, glCtx.TEXTURE_MAG_FILTER, glCtx.LINEAR);
+    const texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     const img = new Image();
     img.crossOrigin = "anonymous";
     img.src = src;
 
     let startTime: number | null = null;
-    let lastFrameTime = 0;
     let loaded = false;
 
     img.onload = () => {
-      glCtx.bindTexture(glCtx.TEXTURE_2D, texture);
-      glCtx.texImage2D(glCtx.TEXTURE_2D, 0, glCtx.RGBA, glCtx.RGBA, glCtx.UNSIGNED_BYTE, img);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
       loaded = true;
       rafRef.current = requestAnimationFrame(draw);
     };
 
     function draw(ts: number) {
-      if (!loaded) return;
-      if (document.hidden) {
-        rafRef.current = requestAnimationFrame(draw);
-        return;
-      }
+      if (!gl || !loaded) return;
       if (!startTime) startTime = ts;
-      if (ts - lastFrameTime < frameDuration) {
-        rafRef.current = requestAnimationFrame(draw);
-        return;
-      }
-
-      lastFrameTime = ts;
       const t = ((ts - startTime) / 1000) * speed;
-      glCtx.uniform1f(uTime, t);
-      glCtx.drawArrays(glCtx.TRIANGLE_STRIP, 0, 4);
+      gl.uniform1f(uTime, t);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
       rafRef.current = requestAnimationFrame(draw);
     }
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
-      glCtx.deleteBuffer(buf);
-      glCtx.deleteShader(vert);
-      glCtx.deleteShader(frag);
-      glCtx.deleteProgram(prog);
-      glCtx.deleteTexture(texture);
+      gl.deleteProgram(prog);
+      gl.deleteTexture(texture);
     };
-  }, [src, amplitude, frequency, speed, quality, fps]);
+  }, [src, amplitude, frequency, speed]);
 
   return (
     <canvas
