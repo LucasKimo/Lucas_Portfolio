@@ -1,0 +1,232 @@
+:root {
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  color: #f5f5f2;
+  /* 배경 그라?�이??�?문양 ?�이 ?�수 ?�이??*/
+  background: #000000;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --text-strong: #e6edf3;
+  --text-muted: #7ee787;
+  --shadow-soft: 0 24px 80px rgba(0, 0, 0, 0.42);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-shell {
+  position: relative;
+  display: grid;
+  place-items: start center;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 3vh 32px 32px;
+  isolation: isolate;
+}
+
+/* .page-shell::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  background: url("/korea.png") center / cover no-repeat;
+  filter: blur(0.5px);
+  transform: scale(1.00);
+  opacity: 0.5;
+  z-index: -2;
+} */
+
+.page-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+}
+
+
+.firefly-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.firefly {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 241, 153, 0.9);
+  box-shadow:
+    0 0 8px rgba(255, 235, 120, 0.9),
+    0 0 18px rgba(255, 219, 92, 0.45);
+  opacity: 0.2;
+  animation: fireflyFloat 16s ease-in-out infinite, fireflyBlink 3.2s ease-in-out infinite;
+}
+
+.firefly::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: rgba(255, 237, 140, 0.22);
+  filter: blur(3px);
+}
+
+
+.hero-card,
+.project-page {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+  width: min(980px, 100%);
+}
+
+.hero-card {
+  padding: 40px 20px;
+}
+
+.hero-card h1,
+.project-page h1 {
+  margin: 0;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: var(--text-strong);
+  font-weight: 700;
+  text-shadow: 0 0 24px rgba(120, 255, 214, 0.08);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.6vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-muted);
+  opacity: 0.92;
+}
+
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border: 1px solid rgba(125, 133, 144, 0.28);
+  border-radius: 999px;
+  background: rgba(13, 17, 23, 0.78);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-soft);
+  font-size: 1rem;
+  color: #c9d1d9;
+  transition: all 180ms ease;
+}
+
+.profile-button {
+  color: #f5f5f2;
+  fill: currentColor;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.profile-link:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 133, 144, 0.28);
+  background: rgba(22, 27, 34, 0.96);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.52);
+  color: #c9d1d9;
+}
+
+
+
+.firefly-1 { top: 14%; left: 9%; animation-delay: -2s; }
+.firefly-2 { top: 22%; left: 24%; animation-delay: -7s; }
+.firefly-3 { top: 10%; left: 42%; animation-delay: -4s; }
+.firefly-4 { top: 18%; right: 18%; animation-delay: -11s; }
+.firefly-5 { top: 34%; right: 10%; animation-delay: -8s; }
+.firefly-6 { top: 48%; left: 12%; animation-delay: -13s; }
+.firefly-7 { top: 58%; left: 28%; animation-delay: -5s; }
+.firefly-8 { top: 64%; right: 24%; animation-delay: -9s; }
+.firefly-9 { top: 78%; left: 16%; animation-delay: -6s; }
+.firefly-10 { top: 84%; right: 12%; animation-delay: -14s; }
+.firefly-11 { top: 40%; left: 62%; animation-delay: -10s; }
+.firefly-12 { top: 72%; left: 54%; animation-delay: -3s; }
+
+
+
+@keyframes fireflyFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+  25% {
+    transform: translate3d(10px, -14px, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-8px, 12px, 0) scale(0.85);
+  }
+  75% {
+    transform: translate3d(12px, 8px, 0) scale(1.05);
+  }
+}
+
+@keyframes fireflyBlink {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  45% {
+    opacity: 0.9;
+  }
+  60% {
+    opacity: 0.35;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    padding: 8vh 18px 24px;
+  }
+
+  .hero-card {
+    padding: 28px 8px;
+  }
+
+  .link-row {
+    flex-direction: column;
+    width: min(100%, 340px);
+  }
+
+  .profile-link {
+    justify-content: center;
+    width: 100%;
+  }
+}
