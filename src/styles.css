@@ -293,7 +293,7 @@ a {
 .eyebrow {
   margin: 0;
   font-size: 0.9vw;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(251, 248, 242, 0.66);
@@ -369,6 +369,10 @@ a {
 
 .name-line {
   display: block;
+}
+
+.name-lockup {
+  cursor: default;
 }
 
 .brand-mark,

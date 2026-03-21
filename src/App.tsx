@@ -208,10 +208,16 @@ export default function App() {
             ))}
           </div>
         </div>
-        <div className="name-lockup" aria-label="Lucas Kim portfolio">
+        <div
+          className="name-lockup"
+          aria-label="Lucas Kim portfolio"
+        >
           <h1>
-            <span className="name-line">LUCAS</span>
-            <span className="name-line">KIM</span>
+            {["LUCAS", "KIM"].map((word, wordIndex) => (
+              <span key={wordIndex} className="name-line">
+                {word}
+              </span>
+            ))}
           </h1>
         </div>
       </section>
