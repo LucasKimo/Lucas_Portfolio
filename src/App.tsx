@@ -1,4 +1,10 @@
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  FileText,
+  Github,
+  Linkedin,
+  type LucideIcon,
+} from "lucide-react";
 import WaveBackground from "./WaveBackground";
 
 const navigationItems = ["Projects", "Archive", "About", "Contact"];
@@ -6,16 +12,23 @@ const socialLinks = [
   {
     href: "https://github.com/LucasKimo",
     label: "GitHub",
+    icon: Github,
   },
   {
     href: "https://www.linkedin.com/in/lucas-eunsu-kim",
     label: "LinkedIn",
+    icon: Linkedin,
   },
   {
     href: "/resume.pdf",
     label: "Resume",
+    icon: FileText,
   },
-];
+] satisfies Array<{
+  href: string;
+  label: string;
+  icon: LucideIcon;
+}>;
 
 export default function App() {
   return (
@@ -51,13 +64,13 @@ export default function App() {
       </header>
       <section className="hero-layout" id="home">
         <div className="hero-copy-block">
-          <p className="eyebrow">Software engineer based in Brisbane</p>
+          <p className="eyebrow">Software engineer | based in brisbane</p>
           <p className="hero-statement">
             Transforming ideas into polished digital products. Building calm,
             reliable experiences that people actually enjoy using.
           </p>
           <div className="hero-links" aria-label="Profile links">
-            {socialLinks.map(({ href, label }) => (
+            {socialLinks.map(({ href, label, icon: Icon }) => (
               <a
                 key={label}
                 className="text-link"
@@ -65,6 +78,12 @@ export default function App() {
                 target={href.startsWith("http") ? "_blank" : undefined}
                 rel={href.startsWith("http") ? "noreferrer" : undefined}
               >
+                <Icon
+                  className="text-link-icon"
+                  aria-hidden="true"
+                  size={16}
+                  strokeWidth={2}
+                />
                 <span>{label}</span>
                 <ArrowUpRight aria-hidden="true" size={16} strokeWidth={2} />
               </a>
