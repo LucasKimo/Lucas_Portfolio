@@ -66,15 +66,15 @@ function compileShader(gl: WebGLRenderingContext, type: number, src: string) {
   return shader;
 }
 
-const MAX_DPR = 1;
+const MAX_DPR = 0.5;
 
 export default function WaveBackground({
   src,
-  amplitude = 0.02,
+  amplitude = 0.05,
   frequency = 0.004,
   speed = 0.9,
   opacity = 0.92,
-  whiteBoost = 2.8,
+  whiteBoost = 5,
 }: WaveBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number>(0);
@@ -141,7 +141,7 @@ export default function WaveBackground({
 
     glContext.uniform1f(uAmp, amplitude);
     glContext.uniform1f(uFreq, frequency);
-    glContext.uniform1f(uWhiteBoost, whiteBoost ?? 2.8);
+    glContext.uniform1f(uWhiteBoost, whiteBoost ?? 5);
     glContext.uniform2f(uCursor, 0.5, 0.5);
 
     const texture = glContext.createTexture();

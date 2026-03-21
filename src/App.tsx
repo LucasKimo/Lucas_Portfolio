@@ -5,6 +5,7 @@ import {
   Linkedin,
   type LucideIcon,
 } from "lucide-react";
+import HoverRollLink from "./HoverRollLink";
 import WaveBackground from "./WaveBackground";
 
 const navigationItems = ["Projects", "Archive", "About", "Contact"];
@@ -41,9 +42,13 @@ export default function App() {
         </a>
         <nav className="main-nav" aria-label="Primary">
           {navigationItems.map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`}>
-              {item}
-            </a>
+            <HoverRollLink
+              key={item}
+              text={item}
+              href={`#${item.toLowerCase()}`}
+              className="main-nav-link"
+              enableWipe
+            />
           ))}
         </nav>
         <div className="topbar-actions">
