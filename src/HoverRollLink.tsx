@@ -1,4 +1,4 @@
-import type { MouseEventHandler } from "react";
+import type { CSSProperties, MouseEventHandler } from "react";
 
 type HoverRollLinkBaseProps = {
   text: string;
@@ -21,18 +21,42 @@ type HoverRollButtonProps = HoverRollLinkBaseProps & {
 
 type HoverRollLinkProps = HoverRollAnchorProps | HoverRollButtonProps;
 
+type HoverRollCharStyle = CSSProperties & Record<`--${string}`, string>;
+
 function getClassName(className?: string, enableWipe?: boolean) {
   return ["hover-roll-link", enableWipe !== false ? "is-wipe" : "", className]
     .filter(Boolean)
     .join(" ");
 }
 
+function renderTextLayer(text: string, layerClassName: string) {
+  return (
+    <span className={`hover-roll-link-layer ${layerClassName}`}>
+      {Array.from(text).map((character, index) => {
+        const style: HoverRollCharStyle = {
+          "--char-index": `${index}`,
+        };
+
+        return (
+          <span
+            key={`${layerClassName}-${index}-${character}`}
+            className="hover-roll-link-char"
+            style={style}
+          >
+            {character === " " ? "\u00A0" : character}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 export default function HoverRollLink(props: HoverRollLinkProps) {
   const content = (
     <>
       <span className="hover-roll-link-track" aria-hidden="true">
-        <span className="hover-roll-link-layer is-current">{props.text}</span>
-        <span className="hover-roll-link-layer is-next">{props.text}</span>
+        {renderTextLayer(props.text, "is-current")}
+        {renderTextLayer(props.text, "is-next")}
       </span>
       <span className="hover-roll-link-sr">{props.text}</span>
     </>
