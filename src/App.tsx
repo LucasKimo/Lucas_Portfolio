@@ -351,7 +351,15 @@ export default function App() {
       <div ref={smoothScrollViewportRef} className="smooth-scroll-viewport">
         <main ref={smoothScrollContentRef} className="portfolio-shell">
           <header className="topbar">
-            <a className="brand-mark" href="#home" aria-label="Lucas Kim home">
+            <a
+              className="brand-mark"
+              href="#"
+              aria-label="Lucas Kim home"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo(0, 0);
+              }}
+            >
               LUCAS KIM
             </a>
             <nav className="main-nav" aria-label="Primary">
