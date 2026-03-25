@@ -32,6 +32,10 @@ body {
   background: #000;
 }
 
+#root {
+  position: relative;
+}
+
 body,
 a,
 button {
@@ -46,9 +50,21 @@ a {
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
-  overflow: clip;
+  overflow-x: clip;
   isolation: isolate;
   padding: clamp(18px, 2vw, 24px) clamp(16px, 1.8vw, 22px) clamp(20px, 2.2vw, 28px);
+}
+
+.smooth-scroll-viewport {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.smooth-scroll-viewport .portfolio-shell {
+  width: 100%;
 }
 
 .topbar {
@@ -341,6 +357,12 @@ a {
   width: min(54vw, 82rem);
   max-width: min(54vw, 82rem);
   margin-top: 0;
+  transform-origin: left bottom;
+  transform:
+    translate3d(0, calc(var(--hero-scroll-progress, 0) * -22vh), 0)
+    scale(calc(1 - (var(--hero-scroll-progress, 0) * 0.54)));
+  opacity: calc(1 - (var(--hero-scroll-progress, 0) * 0.18));
+  will-change: transform;
 }
 
 .name-kicker {
@@ -477,6 +499,7 @@ a {
     max-width: 100%;
     margin-top: 0;
   }
+
 }
 
 @media (max-width: 720px) {
@@ -538,6 +561,13 @@ a {
   .name-lockup h1 {
     font-size: clamp(4.7rem, 26vw, 8rem);
   }
+
+  .name-lockup {
+    transform:
+      translate3d(0, calc(var(--hero-scroll-progress, 0) * -12vh), 0)
+      scale(calc(1 - (var(--hero-scroll-progress, 0) * 0.28)));
+  }
+
 }
 
 @media (min-width: 1600px) {
@@ -678,5 +708,15 @@ a {
 
   .name-lockup h1 {
     font-size: clamp(5.4rem, 20vw, 15rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smooth-scroll-viewport {
+    position: relative;
+    inset: auto;
+    overflow: visible;
+    will-change: auto;
+    transform: none !important;
   }
 }
