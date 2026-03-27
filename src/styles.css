@@ -60,11 +60,14 @@ a {
   inset: 0;
   z-index: 1;
   overflow: hidden;
-  will-change: transform;
 }
 
 .smooth-scroll-viewport .portfolio-shell {
   width: 100%;
+}
+
+.smooth-scroll-content {
+  will-change: transform;
 }
 
 .topbar {
@@ -716,7 +719,11 @@ a {
     position: relative;
     inset: auto;
     overflow: visible;
+  }
+
+  .smooth-scroll-content {
     will-change: auto;
     transform: none !important;
   }
 }
+

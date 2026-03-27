@@ -69,7 +69,8 @@ type NameLockupStyle = CSSProperties & Record<`--${string}`, string>;
 
 export default function App() {
   const smoothScrollViewportRef = useRef<HTMLDivElement | null>(null);
-  const smoothScrollContentRef = useRef<HTMLElement | null>(null);
+  const smoothScrollShellRef = useRef<HTMLElement | null>(null);
+  const smoothScrollContentRef = useRef<HTMLDivElement | null>(null);
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const contactRef = useRef<HTMLAnchorElement | null>(null);
   const roundButtonRef = useRef<HTMLAnchorElement | null>(null);
@@ -139,9 +140,10 @@ export default function App() {
 
   useEffect(() => {
     const viewport = smoothScrollViewportRef.current;
+    const shell = smoothScrollShellRef.current;
     const content = smoothScrollContentRef.current;
 
-    if (!viewport || !content) {
+    if (!viewport || !shell || !content) {
       return;
     }
 
@@ -149,7 +151,7 @@ export default function App() {
 
     if (mediaQuery.matches) {
       document.body.style.minHeight = "";
-      viewport.style.transform = "";
+      content.style.transform = "";
       return;
     }
 
@@ -158,7 +160,7 @@ export default function App() {
     const damping = 22;
 
     const updateBodyHeight = () => {
-      document.body.style.minHeight = `${content.offsetHeight}px`;
+      document.body.style.minHeight = `${shell.offsetHeight}px`;
     };
 
     const animateViewport = (timestamp: number) => {
@@ -189,7 +191,7 @@ export default function App() {
         smoothScrollLastTimeRef.current = null;
       }
 
-      viewport.style.transform = `translate3d(0, ${-smoothScrollCurrentRef.current}px, 0)`;
+      content.style.transform = `translate3d(0, ${-smoothScrollCurrentRef.current}px, 0)`;
 
       if (!isSettled) {
         frameId = window.requestAnimationFrame(animateViewport);
@@ -216,7 +218,7 @@ export default function App() {
         smoothScrollTargetRef.current = window.scrollY;
         smoothScrollVelocityRef.current = 0;
         smoothScrollLastTimeRef.current = null;
-        viewport.style.transform = "";
+        content.style.transform = "";
         document.body.style.minHeight = "";
         return;
       }
@@ -224,20 +226,20 @@ export default function App() {
       updateBodyHeight();
       smoothScrollCurrentRef.current = window.scrollY;
       smoothScrollTargetRef.current = window.scrollY;
-      viewport.style.transform = `translate3d(0, ${-window.scrollY}px, 0)`;
+      content.style.transform = `translate3d(0, ${-window.scrollY}px, 0)`;
       syncViewportTarget();
     };
 
     updateBodyHeight();
     smoothScrollCurrentRef.current = window.scrollY;
     smoothScrollTargetRef.current = window.scrollY;
-    viewport.style.transform = `translate3d(0, ${-window.scrollY}px, 0)`;
+    content.style.transform = `translate3d(0, ${-window.scrollY}px, 0)`;
 
     const resizeObserver = new ResizeObserver(() => {
       updateBodyHeight();
     });
 
-    resizeObserver.observe(content);
+    resizeObserver.observe(shell);
     window.addEventListener("scroll", syncViewportTarget, { passive: true });
     window.addEventListener("resize", updateBodyHeight);
     mediaQuery.addEventListener("change", handleReducedMotionChange);
@@ -253,7 +255,7 @@ export default function App() {
       mediaQuery.removeEventListener("change", handleReducedMotionChange);
 
       smoothScrollLastTimeRef.current = null;
-      viewport.style.transform = "";
+      content.style.transform = "";
       document.body.style.minHeight = "";
     };
   }, []);
@@ -380,6 +382,7 @@ export default function App() {
     window.history.pushState(null, "", "/home");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
   const handleProjectsLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
 
@@ -398,7 +401,7 @@ export default function App() {
     <>
       <WaveBackground src="/background.png" />
       <div ref={smoothScrollViewportRef} className="smooth-scroll-viewport">
-        <main ref={smoothScrollContentRef} className="portfolio-shell">
+        <main ref={smoothScrollShellRef} className="portfolio-shell">
           <header className="topbar">
             <a
               className="brand-mark"
@@ -408,7 +411,7 @@ export default function App() {
             >
               LUCAS KIM
             </a>
-                        <nav className="main-nav" aria-label="Primary">
+            <nav className="main-nav" aria-label="Primary">
               {navigationItems.map((item) =>
                 item === "Projects" ? (
                   <HoverRollLink
@@ -464,76 +467,76 @@ export default function App() {
               </div>
             </div>
           </header>
-          <section className="hero-layout" id="home">
-            <div className="hero-copy-block">
-              <p className="eyebrow">Software engineer | based in brisbane</p>
-              <p className="hero-statement">
-                Bridging the gap between real-world problems and digital solutions.
-                Delivering clean, high-impact experiences that users truly value.
-              </p>
-              <div className="hero-links" aria-label="Profile links">
-                {socialLinks.map(({ href, label, icon: Icon }) => (
-                  <a
-                    key={label}
-                    className="text-link"
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel={href.startsWith("http") ? "noreferrer" : undefined}
-                  >
-                    <Icon
-                      className="text-link-icon"
-                      aria-hidden="true"
-                      size={16}
-                      strokeWidth={2}
-                    />
-                    <span>{label}</span>
-                    <ArrowUpRight aria-hidden="true" size={16} strokeWidth={2} />
-                  </a>
+          <div ref={smoothScrollContentRef} className="smooth-scroll-content">
+            <section className="hero-layout" id="home">
+              <div className="hero-copy-block">
+                <p className="eyebrow">Software engineer | based in brisbane</p>
+                <p className="hero-statement">
+                  Bridging the gap between real-world problems and digital solutions.
+                  Delivering clean, high-impact experiences that users truly value.
+                </p>
+                <div className="hero-links" aria-label="Profile links">
+                  {socialLinks.map(({ href, label, icon: Icon }) => (
+                    <a
+                      key={label}
+                      className="text-link"
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      rel={href.startsWith("http") ? "noreferrer" : undefined}
+                    >
+                      <Icon
+                        className="text-link-icon"
+                        aria-hidden="true"
+                        size={16}
+                        strokeWidth={2}
+                      />
+                      <span>{label}</span>
+                      <ArrowUpRight aria-hidden="true" size={16} strokeWidth={2} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+              <div
+                className="name-lockup"
+                aria-label="Lucas Kim portfolio"
+                style={nameLockupStyle}
+              >
+                <h1>
+                  {["LUCAS", "KIM"].map((word, wordIndex) => (
+                    <span key={wordIndex} className="name-line">
+                      {word}
+                    </span>
+                  ))}
+                </h1>
+              </div>
+            </section>
+            <section className="projects-section" id="projects" aria-labelledby="projects-title">
+              <div className="projects-header">
+                <p className="projects-eyebrow">Selected Work</p>
+                <h2 id="projects-title">Projects</h2>
+              </div>
+              <div className="projects-grid">
+                {featuredProjects.map((project) => (
+                  <article key={project.title} className="project-card">
+                    <div className="project-card-top">
+                      <h3>{project.title}</h3>
+                      <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.title} link`}>
+                        <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2} />
+                      </a>
+                    </div>
+                    <p>{project.description}</p>
+                    <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
+                      {project.tech.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </article>
                 ))}
               </div>
-            </div>
-            <div
-              className="name-lockup"
-              aria-label="Lucas Kim portfolio"
-              style={nameLockupStyle}
-            >
-              <h1>
-                {["LUCAS", "KIM"].map((word, wordIndex) => (
-                  <span key={wordIndex} className="name-line">
-                    {word}
-                  </span>
-                ))}
-              </h1>
-            </div>
-          </section>
-          <section className="projects-section" id="projects" aria-labelledby="projects-title">
-            <div className="projects-header">
-              <p className="projects-eyebrow">Selected Work</p>
-              <h2 id="projects-title">Projects</h2>
-            </div>
-            <div className="projects-grid">
-              {featuredProjects.map((project) => (
-                <article key={project.title} className="project-card">
-                  <div className="project-card-top">
-                    <h3>{project.title}</h3>
-                    <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.title} link`}>
-                      <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2} />
-                    </a>
-                  </div>
-                  <p>{project.description}</p>
-                  <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
-                    {project.tech.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
-          </section>
+            </section>
+          </div>
         </main>
       </div>
     </>
   );
 }
-
-
