@@ -42,30 +42,98 @@ const socialLinks = [
 }>;
 const featuredProjects = [
   {
-    title: "Portfolio v2",
-    description:
-      "A high-performance React portfolio with custom shader background and motion-tuned interactions.",
-    tech: ["React", "TypeScript", "WebGL"],
-    href: "https://github.com/LucasKimo",
+    id: "futurescope",
+    name: "Future Scope",
+    roleTitle: "Design System Lead",
+    region: "Brisbane",
+    scope: "2025 Code Network Hackathon",
+    timeline: "2025 - Present",
+    summary:
+      "Scaling a multi-brand e-commerce ecosystem through governance, systems, and AI-assisted workflows.",
+    bullets: [
+      "Led design system governance across multiple product and dev teams",
+      "Reduced design-to-dev friction through clear documentation and UX standards",
+      "Facilitated stakeholder alignment in complex, multi-team environments",
+    ],
+    tags: ["DESIGNSYSTEMS", "BACKOFFICE", "AI"],
+    visualCards: [
+      "Back-Office Product Design",
+      "Design System and Design Ops",
+      "Figma Documentation and Delivery",
+      "Component Audit and Governance",
+    ],
   },
   {
-    title: "TaskFlow",
-    description:
-      "A collaborative planning dashboard focused on fast keyboard-driven workflows and clear project visibility.",
-    tech: ["Next.js", "Node.js", "PostgreSQL"],
-    href: "https://github.com/LucasKimo",
+    id: "kira",
+    name: "Kira",
+    roleTitle: "Product Design Consultant",
+    region: "London",
+    scope: "EMEA",
+    timeline: "2023-2025",
+    summary:
+      "Redesigning internal risk intelligence tools for faster decision-making in regulated workflows.",
+    bullets: [
+      "Built modular dashboard patterns for analysts and ops teams",
+      "Introduced progressive disclosure for dense legal and compliance data",
+      "Improved workflow completion speed through guided interaction architecture",
+    ],
+    tags: ["B2B", "DASHBOARD", "ENTERPRISE"],
+    visualCards: [
+      "Risk Scoring Cockpit",
+      "Case Review Workspace",
+      "Entity Resolution Flows",
+      "Audit Trail Components",
+    ],
   },
   {
-    title: "Insight API",
-    description:
-      "An analytics API that aggregates user events in real time and exposes decision-ready metrics.",
-    tech: ["Express", "Redis", "Docker"],
-    href: "https://github.com/LucasKimo",
+    id: "tucuvi",
+    name: "Tucuvi",
+    roleTitle: "Experience Design Partner",
+    region: "Madrid",
+    scope: "Europe",
+    timeline: "2022-2024",
+    summary:
+      "Shaping conversational-care products that help clinical teams monitor patients at scale.",
+    bullets: [
+      "Designed triage experiences balancing clarity, urgency, and trust",
+      "Created reusable voice-assistant interaction patterns for care journeys",
+      "Aligned product, data, and clinical stakeholders around measurable UX outcomes",
+    ],
+    tags: ["HEALTHTECH", "VOICE", "PATIENTCARE"],
+    visualCards: [
+      "Clinical Outreach Dashboard",
+      "Conversation Flow Studio",
+      "Care Escalation Rules",
+      "Outcome Tracking Reports",
+    ],
+  },
+  {
+    id: "hp",
+    name: "HP",
+    roleTitle: "Senior Product Designer",
+    region: "Brisbane",
+    scope: "APAC",
+    timeline: "2021-2023",
+    summary:
+      "Driving cross-platform UX consistency for connected hardware and companion software services.",
+    bullets: [
+      "Designed a coherent interaction model across desktop and device touchpoints",
+      "Scaled component libraries for multiple product squads",
+      "Reduced support friction with clearer onboarding and setup experiences",
+    ],
+    tags: ["HARDWARE", "SAAS", "ONBOARDING"],
+    visualCards: [
+      "Device Setup Journey",
+      "Fleet Management Console",
+      "Service Health Monitoring",
+      "Shared UI Toolkit",
+    ],
   },
 ] as const;
 
 type ContactSwitcherStyle = CSSProperties & Record<`--${string}`, string>;
 type NameLockupStyle = CSSProperties & Record<`--${string}`, string>;
+type ProjectSlideDirection = "left" | "right";
 
 export default function App() {
   const smoothScrollViewportRef = useRef<HTMLDivElement | null>(null);
@@ -93,6 +161,8 @@ export default function App() {
     height: 64,
     overlap: 17,
   });
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [projectSlideDirection, setProjectSlideDirection] = useState<ProjectSlideDirection>("right");
 
   useLayoutEffect(() => {
     const switcher = switcherRef.current;
@@ -335,38 +405,6 @@ export default function App() {
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
-
-  // useEffect(() => {
-  //   const updateHeaderVisibility = () => {
-  //     const currentScrollY = window.scrollY;
-  //     const projectsSection = document.getElementById("projects");
-  //     const projectsStart = projectsSection
-  //       ? projectsSection.getBoundingClientRect().top + window.scrollY - 96
-  //       : window.innerHeight;
-  //     const isInOtherSections = currentScrollY >= projectsStart;
-  //     const scrollDelta = currentScrollY - headerLastScrollYRef.current;
-
-  //     if (!isInOtherSections || currentScrollY <= 0) {
-  //       setIsHeaderHidden(false);
-  //     } else if (scrollDelta > 2) {
-  //       setIsHeaderHidden(true);
-  //     } else if (scrollDelta < -2) {
-  //       setIsHeaderHidden(false);
-  //     }
-
-  //     headerLastScrollYRef.current = currentScrollY;
-  //   };
-
-  //   updateHeaderVisibility();
-
-  //   window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
-  //   window.addEventListener("resize", updateHeaderVisibility);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", updateHeaderVisibility);
-  //     window.removeEventListener("resize", updateHeaderVisibility);
-  //   };
-  // }, []);
   useEffect(() => {
     let projectsStart = Infinity;
 
@@ -422,6 +460,17 @@ export default function App() {
 
   const nameLockupStyle: NameLockupStyle = {
     "--hero-scroll-progress": heroScrollProgress.toFixed(3),
+  };
+
+  const activeProject = featuredProjects[activeProjectIndex];
+
+  const handleProjectSelect = (index: number) => {
+    if (index === activeProjectIndex) {
+      return;
+    }
+
+    setProjectSlideDirection(index > activeProjectIndex ? "right" : "left");
+    setActiveProjectIndex(index);
   };
 
   const handleContactBlur = (event: FocusEvent<HTMLDivElement>) => {
@@ -579,28 +628,59 @@ export default function App() {
               </div>
             </section>
             <section className="projects-section" id="projects" aria-labelledby="projects-title">
-              <div className="projects-header">
-                <p className="projects-eyebrow">Selected Work</p>
-                <h2 id="projects-title">Projects</h2>
+              <div className="projects-topbar">
+                <p className="projects-eyebrow" id="projects-title">Selected Work</p>
+                <nav className="project-switcher" aria-label="Project switcher">
+                  {featuredProjects.map((project, index) => (
+                    <button
+                      key={project.id}
+                      type="button"
+                      className={`project-switch-link${index === activeProjectIndex ? " is-active" : ""}`}
+                      onClick={() => {
+                        handleProjectSelect(index);
+                      }}
+                    >
+                      {project.name}
+                    </button>
+                  ))}
+                </nav>
+                <a className="projects-all-link" href="/projects">
+                  See All Projects <span aria-hidden="true">→</span>
+                </a>
               </div>
-              <div className="projects-grid">
-                {featuredProjects.map((project) => (
-                  <article key={project.title} className="project-card">
-                    <div className="project-card-top">
-                      <h3>{project.title}</h3>
-                      <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.title} link`}>
-                        <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2} />
-                      </a>
+
+              <article
+                key={`${activeProject.id}-${projectSlideDirection}`}
+                className={`featured-project ${projectSlideDirection === "right" ? "is-slide-right" : "is-slide-left"}`}
+              >
+                <div className="featured-project-visual" aria-hidden="true">
+                  {activeProject.visualCards.map((label, index) => (
+                    <div key={`${activeProject.id}-${label}`} className={`visual-card visual-card-${index + 1}`}>
+                      <span>{label}</span>
                     </div>
-                    <p>{project.description}</p>
-                    <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
-                      {project.tech.map((item) => (
-                        <li key={item}>{item}</li>
+                  ))}
+                </div>
+
+                <div className="featured-project-copy">
+                  <div className="featured-project-content">
+                    <p className="featured-project-meta">
+                      {activeProject.region} • {activeProject.scope} • {activeProject.timeline}
+                    </p>
+                    <h3>{activeProject.name} • {activeProject.roleTitle}</h3>
+                    <p className="featured-project-summary">{activeProject.summary}</p>
+                    <ul className="featured-project-bullets">
+                      {activeProject.bullets.map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
                       ))}
                     </ul>
-                  </article>
-                ))}
-              </div>
+                  </div>
+                  <div className="featured-project-tags" aria-label="Project tags">
+                    {activeProject.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </article>
             </section>
           </div>
         </main>
@@ -608,6 +688,15 @@ export default function App() {
     </>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 
