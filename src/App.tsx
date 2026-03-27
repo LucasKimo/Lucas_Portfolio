@@ -82,9 +82,11 @@ export default function App() {
   const smoothScrollTargetRef = useRef(0);
   const smoothScrollVelocityRef = useRef(0);
   const smoothScrollLastTimeRef = useRef<number | null>(null);
+  const headerLastScrollYRef = useRef(0);
   const [heroScrollProgress, setHeroScrollProgress] = useState(0);
   const [isContactSwapped, setIsContactSwapped] = useState(false);
   const [isArrowBehind, setIsArrowBehind] = useState(false);
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [contactMetrics, setContactMetrics] = useState({
     pillWidth: 154,
     roundWidth: 64,
@@ -130,12 +132,6 @@ export default function App() {
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateMetrics);
     };
-  }, []);
-
-  useEffect(() => {
-    if (window.location.pathname === "/") {
-      window.history.replaceState(null, "", "/home");
-    }
   }, []);
 
   useEffect(() => {
@@ -340,6 +336,78 @@ export default function App() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const updateHeaderVisibility = () => {
+  //     const currentScrollY = window.scrollY;
+  //     const projectsSection = document.getElementById("projects");
+  //     const projectsStart = projectsSection
+  //       ? projectsSection.getBoundingClientRect().top + window.scrollY - 96
+  //       : window.innerHeight;
+  //     const isInOtherSections = currentScrollY >= projectsStart;
+  //     const scrollDelta = currentScrollY - headerLastScrollYRef.current;
+
+  //     if (!isInOtherSections || currentScrollY <= 0) {
+  //       setIsHeaderHidden(false);
+  //     } else if (scrollDelta > 2) {
+  //       setIsHeaderHidden(true);
+  //     } else if (scrollDelta < -2) {
+  //       setIsHeaderHidden(false);
+  //     }
+
+  //     headerLastScrollYRef.current = currentScrollY;
+  //   };
+
+  //   updateHeaderVisibility();
+
+  //   window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
+  //   window.addEventListener("resize", updateHeaderVisibility);
+
+  //   return () => {
+  //     window.removeEventListener("scroll", updateHeaderVisibility);
+  //     window.removeEventListener("resize", updateHeaderVisibility);
+  //   };
+  // }, []);
+  useEffect(() => {
+    let projectsStart = Infinity;
+
+    const calcProjectsStart = () => {
+      const projectsSection = document.getElementById("projects");
+      if (projectsSection) {
+        projectsStart =
+          projectsSection.getBoundingClientRect().top +
+          window.scrollY -
+          96;
+      }
+    };
+
+    calcProjectsStart();
+    window.addEventListener("resize", calcProjectsStart);
+
+    const updateHeaderVisibility = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - headerLastScrollYRef.current;
+      const isInOtherSections = currentScrollY >= projectsStart;
+
+      if (!isInOtherSections || currentScrollY <= 0) {
+        setIsHeaderHidden(false);
+      } else if (scrollDelta > 2) {
+        setIsHeaderHidden(true);
+      } else if (scrollDelta < -2) {
+        setIsHeaderHidden(false);
+      }
+
+      headerLastScrollYRef.current = currentScrollY;
+    };
+
+    updateHeaderVisibility();
+    window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateHeaderVisibility);
+      window.removeEventListener("resize", calcProjectsStart);
+    };
+  }, []);
+
   const contactSwitcherStyle: ContactSwitcherStyle = {
     "--contact-pill-width": `${contactMetrics.pillWidth}px`,
     "--round-button-width": `${contactMetrics.roundWidth}px`,
@@ -379,7 +447,7 @@ export default function App() {
 
   const handleBrandClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    window.history.pushState(null, "", "/home");
+    window.history.pushState(null, "", "/");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -393,7 +461,7 @@ export default function App() {
     }
 
     const projectsTop = projectsSection.getBoundingClientRect().top + window.scrollY;
-    window.history.replaceState(null, "", "/home#projects");
+    window.history.replaceState(null, "", "/projects");
     window.scrollTo({ top: projectsTop, behavior: "smooth" });
   };
 
@@ -402,10 +470,10 @@ export default function App() {
       <WaveBackground src="/background.png" />
       <div ref={smoothScrollViewportRef} className="smooth-scroll-viewport">
         <main ref={smoothScrollShellRef} className="portfolio-shell">
-          <header className="topbar">
+          <header className={`topbar${isHeaderHidden ? " is-hidden" : ""}`}>
             <a
               className="brand-mark"
-              href="/home"
+              href="/"
               aria-label="Lucas Kim home"
               onClick={handleBrandClick}
             >
@@ -417,7 +485,7 @@ export default function App() {
                   <HoverRollLink
                     key={item}
                     text={item}
-                    href="#projects"
+                    href="/projects"
                     onClick={handleProjectsLinkClick}
                     className="main-nav-link"
                     enableWipe
@@ -434,7 +502,7 @@ export default function App() {
               )}
             </nav>
             <div className="topbar-actions">
-              <a className="locale-switch" href="#contact">
+              <a className="locale-switch" href="/contact">
                 EN
               </a>
               <div
@@ -540,3 +608,9 @@ export default function App() {
     </>
   );
 }
+
+
+
+
+
+

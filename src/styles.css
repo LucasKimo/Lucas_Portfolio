@@ -77,6 +77,18 @@ a {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 24px;
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  transition:
+    transform 1200ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 260ms ease;
+  will-change: transform, opacity;
+}
+
+.topbar.is-hidden {
+  transform: translate3d(0, -135%, 0);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .brand-mark {
@@ -715,6 +727,10 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .topbar {
+    transition: none;
+  }
+
   .smooth-scroll-viewport {
     position: relative;
     inset: auto;
@@ -726,4 +742,7 @@ a {
     transform: none !important;
   }
 }
+
+
+
 
