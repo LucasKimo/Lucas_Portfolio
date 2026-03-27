@@ -11,6 +11,7 @@ type HoverRollAnchorProps = HoverRollLinkBaseProps & {
   href: string;
   target?: string;
   rel?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 type HoverRollButtonProps = HoverRollLinkBaseProps & {
@@ -76,7 +77,7 @@ export default function HoverRollLink(props: HoverRollLinkProps) {
     );
   }
 
-  const { as: _as, text, className, enableWipe, href, target, rel } = props;
+  const { as: _as, text, className, enableWipe, href, target, rel, onClick } = props;
 
   return (
     <a
@@ -84,6 +85,7 @@ export default function HoverRollLink(props: HoverRollLinkProps) {
       target={target}
       rel={rel}
       className={getClassName(className, enableWipe)}
+      onClick={onClick}
     >
       {content}
     </a>

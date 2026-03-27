@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type MouseEvent,
   type FocusEvent,
 } from "react";
 import {
@@ -39,6 +40,29 @@ const socialLinks = [
   label: string;
   icon: LucideIcon;
 }>;
+const featuredProjects = [
+  {
+    title: "Portfolio v2",
+    description:
+      "A high-performance React portfolio with custom shader background and motion-tuned interactions.",
+    tech: ["React", "TypeScript", "WebGL"],
+    href: "https://github.com/LucasKimo",
+  },
+  {
+    title: "TaskFlow",
+    description:
+      "A collaborative planning dashboard focused on fast keyboard-driven workflows and clear project visibility.",
+    tech: ["Next.js", "Node.js", "PostgreSQL"],
+    href: "https://github.com/LucasKimo",
+  },
+  {
+    title: "Insight API",
+    description:
+      "An analytics API that aggregates user events in real time and exposes decision-ready metrics.",
+    tech: ["Express", "Redis", "Docker"],
+    href: "https://github.com/LucasKimo",
+  },
+] as const;
 
 type ContactSwitcherStyle = CSSProperties & Record<`--${string}`, string>;
 type NameLockupStyle = CSSProperties & Record<`--${string}`, string>;
@@ -105,6 +129,12 @@ export default function App() {
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateMetrics);
     };
+  }, []);
+
+  useEffect(() => {
+    if (window.location.pathname === "/") {
+      window.history.replaceState(null, "", "/home");
+    }
   }, []);
 
   useEffect(() => {
@@ -345,6 +375,25 @@ export default function App() {
     }
   };
 
+  const handleBrandClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    window.history.pushState(null, "", "/home");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const handleProjectsLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const projectsSection = document.getElementById("projects");
+
+    if (!projectsSection) {
+      return;
+    }
+
+    const projectsTop = projectsSection.getBoundingClientRect().top + window.scrollY;
+    window.history.replaceState(null, "", "/home#projects");
+    window.scrollTo({ top: projectsTop, behavior: "smooth" });
+  };
+
   return (
     <>
       <WaveBackground src="/background.png" />
@@ -353,25 +402,33 @@ export default function App() {
           <header className="topbar">
             <a
               className="brand-mark"
-              href="#"
+              href="/home"
               aria-label="Lucas Kim home"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo(0, 0);
-              }}
+              onClick={handleBrandClick}
             >
               LUCAS KIM
             </a>
-            <nav className="main-nav" aria-label="Primary">
-              {navigationItems.map((item) => (
-                <HoverRollLink
-                  key={item}
-                  text={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="main-nav-link"
-                  enableWipe
-                />
-              ))}
+                        <nav className="main-nav" aria-label="Primary">
+              {navigationItems.map((item) =>
+                item === "Projects" ? (
+                  <HoverRollLink
+                    key={item}
+                    text={item}
+                    href="#projects"
+                    onClick={handleProjectsLinkClick}
+                    className="main-nav-link"
+                    enableWipe
+                  />
+                ) : (
+                  <HoverRollLink
+                    key={item}
+                    text={item}
+                    href={`/${item.toLowerCase()}`}
+                    className="main-nav-link"
+                    enableWipe
+                  />
+                )
+              )}
             </nav>
             <div className="topbar-actions">
               <a className="locale-switch" href="#contact">
@@ -449,8 +506,34 @@ export default function App() {
               </h1>
             </div>
           </section>
+          <section className="projects-section" id="projects" aria-labelledby="projects-title">
+            <div className="projects-header">
+              <p className="projects-eyebrow">Selected Work</p>
+              <h2 id="projects-title">Projects</h2>
+            </div>
+            <div className="projects-grid">
+              {featuredProjects.map((project) => (
+                <article key={project.title} className="project-card">
+                  <div className="project-card-top">
+                    <h3>{project.title}</h3>
+                    <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.title} link`}>
+                      <ArrowUpRight aria-hidden="true" size={18} strokeWidth={2} />
+                    </a>
+                  </div>
+                  <p>{project.description}</p>
+                  <ul className="project-tech-list" aria-label={`${project.title} technologies`}>
+                    {project.tech.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </section>
         </main>
       </div>
     </>
   );
 }
+
+
