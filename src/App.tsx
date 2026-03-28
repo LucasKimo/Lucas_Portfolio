@@ -44,18 +44,18 @@ const featuredProjects = [
   {
     id: "futurescope",
     name: "Future Scope",
-    roleTitle: "Design System Lead",
+    roleTitle: "Team Leader",
     region: "Brisbane",
     scope: "2025 Code Network Hackathon",
     timeline: "2025 - Present",
     summary:
-      "Scaling a multi-brand e-commerce ecosystem through governance, systems, and AI-assisted workflows.",
+      "2025 Code Network Winter Hackathon Winner | AI-powered roadmap generator web app",
     bullets: [
       "Led design system governance across multiple product and dev teams",
       "Reduced design-to-dev friction through clear documentation and UX standards",
       "Facilitated stakeholder alignment in complex, multi-team environments",
     ],
-    tags: ["DESIGNSYSTEMS", "BACKOFFICE", "AI"],
+    tags: ["JavaScript", "React", "Node.js", "OpenAI API", "PostgreSQL", "AWS"],
     visualCards: [
       "Back-Office Product Design",
       "Design System and Design Ops",
@@ -64,12 +64,12 @@ const featuredProjects = [
     ],
   },
   {
-    id: "kira",
-    name: "Kira",
-    roleTitle: "Product Design Consultant",
-    region: "London",
-    scope: "EMEA",
-    timeline: "2023-2025",
+    id: "bionauts",
+    name: "Bionauts",
+    roleTitle: "Frontend Developer",
+    region: "Brisbane",
+    scope: "QUT",
+    timeline: "2025",
     summary:
       "Redesigning internal risk intelligence tools for faster decision-making in regulated workflows.",
     bullets: [
@@ -77,7 +77,7 @@ const featuredProjects = [
       "Introduced progressive disclosure for dense legal and compliance data",
       "Improved workflow completion speed through guided interaction architecture",
     ],
-    tags: ["B2B", "DASHBOARD", "ENTERPRISE"],
+    tags: ["JavaScript", "React", "Bootstrap", "Node.js"],
     visualCards: [
       "Risk Scoring Cockpit",
       "Case Review Workspace",
@@ -86,12 +86,12 @@ const featuredProjects = [
     ],
   },
   {
-    id: "tucuvi",
-    name: "Tucuvi",
-    roleTitle: "Experience Design Partner",
-    region: "Madrid",
-    scope: "Europe",
-    timeline: "2022-2024",
+    id: "planary",
+    name: "Planary",
+    roleTitle: "Full-stack Developer",
+    region: "Brisbane",
+    scope: "Personal Project",
+    timeline: "2025 - Present",
     summary:
       "Shaping conversational-care products that help clinical teams monitor patients at scale.",
     bullets: [
@@ -105,28 +105,6 @@ const featuredProjects = [
       "Conversation Flow Studio",
       "Care Escalation Rules",
       "Outcome Tracking Reports",
-    ],
-  },
-  {
-    id: "hp",
-    name: "HP",
-    roleTitle: "Senior Product Designer",
-    region: "Brisbane",
-    scope: "APAC",
-    timeline: "2021-2023",
-    summary:
-      "Driving cross-platform UX consistency for connected hardware and companion software services.",
-    bullets: [
-      "Designed a coherent interaction model across desktop and device touchpoints",
-      "Scaled component libraries for multiple product squads",
-      "Reduced support friction with clearer onboarding and setup experiences",
-    ],
-    tags: ["HARDWARE", "SAAS", "ONBOARDING"],
-    visualCards: [
-      "Device Setup Journey",
-      "Fleet Management Console",
-      "Service Health Monitoring",
-      "Shared UI Toolkit",
     ],
   },
 ] as const;
