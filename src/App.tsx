@@ -57,10 +57,10 @@ const featuredProjects = [
     ],
     tags: ["JavaScript", "React", "Node.js", "OpenAI API", "PostgreSQL", "AWS"],
     visualCards: [
-      "Back-Office Product Design",
-      "Design System and Design Ops",
-      "Figma Documentation and Delivery",
-      "Component Audit and Governance",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+1",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+2",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+3",
+      "/futurescope4.jpg",
     ],
   },
   {
@@ -79,10 +79,10 @@ const featuredProjects = [
     ],
     tags: ["JavaScript", "React", "Bootstrap", "Node.js"],
     visualCards: [
-      "Risk Scoring Cockpit",
-      "Case Review Workspace",
-      "Entity Resolution Flows",
-      "Audit Trail Components",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+1",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+2",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+3",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+4",
     ],
   },
   {
@@ -101,10 +101,10 @@ const featuredProjects = [
     ],
     tags: ["HEALTHTECH", "VOICE", "PATIENTCARE"],
     visualCards: [
-      "Clinical Outreach Dashboard",
-      "Conversation Flow Studio",
-      "Care Escalation Rules",
-      "Outcome Tracking Reports",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+1",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+2",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+3",
+      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+4",
     ],
   },
 ] as const;
@@ -383,16 +383,55 @@ export default function App() {
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
+  // useEffect(() => {
+  //   let projectsStart = Infinity;
+
+  //   const calcProjectsStart = () => {
+  //     const projectsSection = document.getElementById("projects");
+  //     if (projectsSection) {
+  //       projectsStart =
+  //         projectsSection.getBoundingClientRect().top +
+  //         window.scrollY -
+  //         96;
+  //     }
+  //   };
+
+  //   calcProjectsStart();
+  //   window.addEventListener("resize", calcProjectsStart);
+
+  //   const updateHeaderVisibility = () => {
+  //     const currentScrollY = window.scrollY;
+  //     const scrollDelta = currentScrollY - headerLastScrollYRef.current;
+  //     const isInOtherSections = currentScrollY >= projectsStart;
+
+  //     if (!isInOtherSections || currentScrollY <= 0) {
+  //       setIsHeaderHidden(false);
+  //     } else if (scrollDelta > 2) {
+  //       setIsHeaderHidden(true);
+  //     } else if (scrollDelta < -2) {
+  //       setIsHeaderHidden(false);
+  //     }
+
+  //     headerLastScrollYRef.current = currentScrollY;
+  //   };
+
+  //   updateHeaderVisibility();
+  //   window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
+
+  //   return () => {
+  //     window.removeEventListener("scroll", updateHeaderVisibility);
+  //     window.removeEventListener("resize", calcProjectsStart);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    let projectsStart = Infinity;
+    const projectsStartRef = { current: Infinity }; // ← use object ref pattern
 
     const calcProjectsStart = () => {
       const projectsSection = document.getElementById("projects");
       if (projectsSection) {
-        projectsStart =
-          projectsSection.getBoundingClientRect().top +
-          window.scrollY -
-          96;
+        projectsStartRef.current =
+          projectsSection.getBoundingClientRect().top + window.scrollY - 96;
       }
     };
 
@@ -402,7 +441,7 @@ export default function App() {
     const updateHeaderVisibility = () => {
       const currentScrollY = window.scrollY;
       const scrollDelta = currentScrollY - headerLastScrollYRef.current;
-      const isInOtherSections = currentScrollY >= projectsStart;
+      const isInOtherSections = currentScrollY >= projectsStartRef.current; // ← reads updated value
 
       if (!isInOtherSections || currentScrollY <= 0) {
         setIsHeaderHidden(false);
@@ -632,9 +671,14 @@ export default function App() {
                 className={`featured-project ${projectSlideDirection === "right" ? "is-slide-right" : "is-slide-left"}`}
               >
                 <div className="featured-project-visual" aria-hidden="true">
-                  {activeProject.visualCards.map((label, index) => (
-                    <div key={`${activeProject.id}-${label}`} className={`visual-card visual-card-${index + 1}`}>
-                      <span>{label}</span>
+                  {activeProject.visualCards.map((src, index) => (
+                    <div key={`${activeProject.id}-${index}`} className={`visual-card visual-card-${index + 1}`}>
+                      <img
+                        src={src}
+                        alt=""
+                        draggable={false}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", borderRadius: "inherit" }}
+                      />
                     </div>
                   ))}
                 </div>

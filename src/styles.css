@@ -80,7 +80,7 @@ a {
   transform: translate3d(0, 0, 0);
   opacity: 1;
   transition:
-    transform 1200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1600ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 260ms ease;
   will-change: transform, opacity;
 }
@@ -574,10 +574,11 @@ a {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  padding: clamp(16px, 2vw, 22px);
-  border-radius: 18px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 13px;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96), rgba(236, 236, 240, 0.93));
+  
   color: #171b23;
   font-size: clamp(1rem, 1.3vw, 1.4rem);
   font-weight: 700;
@@ -589,37 +590,10 @@ a {
   max-width: 22ch;
 }
 
-.visual-card-1 {
-  width: 43%;
-  height: 42%;
-  left: -4%;
-  top: 9%;
-  transform: rotate(-12deg);
-}
-
-.visual-card-2 {
-  width: 56%;
-  height: 47%;
-  right: 9%;
-  top: 5%;
-  transform: rotate(-9deg);
-}
-
-.visual-card-3 {
-  width: 52%;
-  height: 45%;
-  left: 12%;
-  bottom: -2%;
-  transform: rotate(-4deg);
-}
-
-.visual-card-4 {
-  width: 39%;
-  height: 38%;
-  right: 8%;
-  bottom: 6%;
-  transform: rotate(-8deg);
-}
+.visual-card-1 { width: 46%; height: 44%; left: 0%;  top: 11%;    transform: rotate(-6deg); }
+.visual-card-2 { width: 46%; height: 44%; right: 6%; top: 4%;    transform: rotate(-6deg); }
+.visual-card-3 { width: 46%; height: 44%; left: 4%;  bottom: -2.5%; transform: rotate(-6deg); }
+.visual-card-4 { width: 46%; height: 44%; right: 2%; bottom: 4%; transform: rotate(-6deg); }
 
 .featured-project-copy {
   padding: clamp(24px, 3.6vw, 56px) clamp(18px, 2.6vw, 46px) clamp(12px, 1.8vw, 24px);
