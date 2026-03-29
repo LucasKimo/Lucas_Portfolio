@@ -111,7 +111,6 @@ const featuredProjects = [
 
 type ContactSwitcherStyle = CSSProperties & Record<`--${string}`, string>;
 type NameLockupStyle = CSSProperties & Record<`--${string}`, string>;
-type ProjectSlideDirection = "left" | "right";
 
 export default function App() {
   const smoothScrollViewportRef = useRef<HTMLDivElement | null>(null);
@@ -140,7 +139,6 @@ export default function App() {
     overlap: 17,
   });
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-  const [projectSlideDirection, setProjectSlideDirection] = useState<ProjectSlideDirection>("right");
 
   useLayoutEffect(() => {
     const switcher = switcherRef.current;
@@ -486,7 +484,6 @@ export default function App() {
       return;
     }
 
-    setProjectSlideDirection(index > activeProjectIndex ? "right" : "left");
     setActiveProjectIndex(index);
   };
 
@@ -667,8 +664,8 @@ export default function App() {
               </div>
 
               <article
-                key={`${activeProject.id}-${projectSlideDirection}`}
-                className={`featured-project ${projectSlideDirection === "right" ? "is-slide-right" : "is-slide-left"}`}
+                key={activeProject.id}
+                className="featured-project"
               >
                 <div className="featured-project-visual" aria-hidden="true">
                   {activeProject.visualCards.map((src, index) => (
