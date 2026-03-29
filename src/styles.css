@@ -52,7 +52,7 @@ a {
   min-height: 100dvh;
   overflow-x: clip;
   isolation: isolate;
-  padding: clamp(18px, 2vw, 24px) clamp(16px, 1.8vw, 22px) clamp(20px, 2.2vw, 28px);
+  padding: clamp(18px, 2vw, 24px) clamp(8px, 1vw, 12px) clamp(20px, 2.2vw, 28px);
 }
 
 .smooth-scroll-viewport {

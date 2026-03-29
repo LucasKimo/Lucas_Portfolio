@@ -381,46 +381,6 @@ export default function App() {
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
-  // useEffect(() => {
-  //   let projectsStart = Infinity;
-
-  //   const calcProjectsStart = () => {
-  //     const projectsSection = document.getElementById("projects");
-  //     if (projectsSection) {
-  //       projectsStart =
-  //         projectsSection.getBoundingClientRect().top +
-  //         window.scrollY -
-  //         96;
-  //     }
-  //   };
-
-  //   calcProjectsStart();
-  //   window.addEventListener("resize", calcProjectsStart);
-
-  //   const updateHeaderVisibility = () => {
-  //     const currentScrollY = window.scrollY;
-  //     const scrollDelta = currentScrollY - headerLastScrollYRef.current;
-  //     const isInOtherSections = currentScrollY >= projectsStart;
-
-  //     if (!isInOtherSections || currentScrollY <= 0) {
-  //       setIsHeaderHidden(false);
-  //     } else if (scrollDelta > 2) {
-  //       setIsHeaderHidden(true);
-  //     } else if (scrollDelta < -2) {
-  //       setIsHeaderHidden(false);
-  //     }
-
-  //     headerLastScrollYRef.current = currentScrollY;
-  //   };
-
-  //   updateHeaderVisibility();
-  //   window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
-
-  //   return () => {
-  //     window.removeEventListener("scroll", updateHeaderVisibility);
-  //     window.removeEventListener("resize", calcProjectsStart);
-  //   };
-  // }, []);
 
   useEffect(() => {
     const projectsStartRef = { current: Infinity }; // ← use object ref pattern
@@ -429,7 +389,7 @@ export default function App() {
       const projectsSection = document.getElementById("projects");
       if (projectsSection) {
         projectsStartRef.current =
-          projectsSection.getBoundingClientRect().top + window.scrollY - 96;
+          projectsStartRef.current = projectsSection.offsetTop - 96;
       }
     };
 
