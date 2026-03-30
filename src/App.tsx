@@ -618,7 +618,12 @@ export default function App() {
                       src={activeProject.image}
                       alt=""
                       draggable={false}
-                      style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                      style={{ width: "100%",
+                              height: "100%", 
+                              objectFit: "contain", 
+                              display: "block",
+                              objectPosition: "-60px center",
+                             }}
                     />
                   </div>
                 </div>
