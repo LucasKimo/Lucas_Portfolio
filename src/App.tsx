@@ -629,13 +629,14 @@ export default function App() {
               <article
                 key={activeProject.id}
                 className="featured-project"
+                onMouseMove={handleVisualMouseMove} 
+                onMouseEnter={handleVisualMouseEnter}
+                onMouseLeave={handleVisualMouseLeave}
               >
                 <div 
                   className="featured-project-visual"
                   aria-hidden="true"
-                  onMouseMove={handleVisualMouseMove} 
-                  onMouseEnter={handleVisualMouseEnter}
-                  onMouseLeave={handleVisualMouseLeave}
+                  
                 >
                   <div className="visual-single-card">
                     <img
