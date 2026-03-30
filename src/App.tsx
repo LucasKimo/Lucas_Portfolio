@@ -125,6 +125,23 @@ export default function App() {
   });
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
+  const cursorRef = useRef<HTMLDivElement | null>(null);
+
+  const handleVisualMouseMove = (e: MouseEvent) => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+  };
+
+  const handleVisualMouseEnter = () => {
+    cursorRef.current?.classList.add("is-visible");
+  };
+
+  const handleVisualMouseLeave = () => {
+    cursorRef.current?.classList.remove("is-visible");
+  };
+
   useLayoutEffect(() => {
     const switcher = switcherRef.current;
     const contact = contactRef.current;
@@ -475,6 +492,7 @@ export default function App() {
 
   return (
     <>
+      <div ref={cursorRef} className="visual-cursor">VIEW</div>
       <WaveBackground src="/background.png" />
       <div ref={smoothScrollViewportRef} className="smooth-scroll-viewport">
         <main ref={smoothScrollShellRef} className="portfolio-shell">
@@ -612,7 +630,13 @@ export default function App() {
                 key={activeProject.id}
                 className="featured-project"
               >
-                <div className="featured-project-visual" aria-hidden="true">
+                <div 
+                  className="featured-project-visual"
+                  aria-hidden="true"
+                  onMouseMove={handleVisualMouseMove} 
+                  onMouseEnter={handleVisualMouseEnter}
+                  onMouseLeave={handleVisualMouseLeave}
+                >
                   <div className="visual-single-card">
                     <img
                       src={activeProject.image}

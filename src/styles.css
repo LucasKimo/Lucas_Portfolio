@@ -566,6 +566,37 @@ a {
 .featured-project-visual {
   perspective: 900px;
   overflow: hidden;
+  cursor: none;
+}
+
+.visual-cursor {
+  position: fixed;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(50, 50, 50, 0.5);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition:
+    opacity 240ms ease,
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.visual-cursor.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .visual-single-card {
