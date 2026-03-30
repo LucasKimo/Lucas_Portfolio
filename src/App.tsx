@@ -56,12 +56,7 @@ const featuredProjects = [
       "Facilitated stakeholder alignment in complex, multi-team environments",
     ],
     tags: ["JavaScript", "React", "Node.js", "OpenAI API", "PostgreSQL", "AWS"],
-    visualCards: [
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+1",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+2",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+3",
-      "/futurescope4.jpg",
-    ],
+    image: "/FS.png"
   },
   {
     id: "bionauts",
@@ -78,12 +73,7 @@ const featuredProjects = [
       "Improved workflow completion speed through guided interaction architecture",
     ],
     tags: ["JavaScript", "React", "Bootstrap", "Node.js"],
-    visualCards: [
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+1",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+2",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+3",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+4",
-    ],
+    image: '/FS.png'
   },
   {
     id: "planary",
@@ -100,12 +90,7 @@ const featuredProjects = [
       "Aligned product, data, and clinical stakeholders around measurable UX outcomes",
     ],
     tags: ["HEALTHTECH", "VOICE", "PATIENTCARE"],
-    visualCards: [
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+1",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+2",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+3",
-      "https://placehold.co/400x300/1a1a1a/ffffff?text=Future+Scope+4",
-    ],
+    image: "/FS.png"
   },
 ] as const;
 
@@ -628,16 +613,14 @@ export default function App() {
                 className="featured-project"
               >
                 <div className="featured-project-visual" aria-hidden="true">
-                  {activeProject.visualCards.map((src, index) => (
-                    <div key={`${activeProject.id}-${index}`} className={`visual-card visual-card-${index + 1}`}>
-                      <img
-                        src={src}
-                        alt=""
-                        draggable={false}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", borderRadius: "inherit" }}
-                      />
-                    </div>
-                  ))}
+                  <div className="visual-single-card">
+                    <img
+                      src={activeProject.image}
+                      alt=""
+                      draggable={false}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    />
+                  </div>
                 </div>
 
                 <div className="featured-project-copy">
