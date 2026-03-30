@@ -546,13 +546,11 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 28px;
   background: rgba(6, 9, 14, 0.9);
-  overflow: visible;
+  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   height: min(80vh, 900px);
 }
-
-
 
 .featured-project-visual {
   position: relative;
@@ -566,25 +564,22 @@ a {
 
 .featured-project-visual {
   perspective: 900px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .visual-single-card {
   position: absolute;
-  inset: clamp(56px, 9vw, 110px); 
+  inset: 0;
   overflow: hidden;
   box-shadow: 0 26px 44px rgba(0, 0, 0, 0.35);
-  transform: rotate(-6deg) rotateY(14deg) rotateX(4deg);
+  transform: rotate(-15deg) rotateY(10deg) rotateX(4deg);
   transform-style: preserve-3d;
   transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.visual-single-card img {
-  border-radius: 13px;
-}
 
 .featured-project-visual:hover .visual-single-card {
-  transform: rotate(-3deg) rotateY(6deg) rotateX(2deg);
+  transform: rotate(-15deg) rotateY(10deg) rotateX(4deg) scale(1.03);
 }
 
 .featured-project-copy {
@@ -1030,6 +1025,7 @@ a {
     transform: none !important;
   }
 }
+
 
 
 
