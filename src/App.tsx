@@ -525,14 +525,14 @@ export default function App() {
                 <a
                   ref={contactRef}
                   className="contact-pill"
-                  href="mailto:lucaseunsu.kim@gmail.com"
+                  href="mailto:eunsukim1180@gmail.com"
                 >
                   Contact Me
                 </a>
                 <a
                   ref={roundButtonRef}
                   className="round-button"
-                  href="mailto:lucaseunsu.kim@gmail.com"
+                  href="mailto:eunsukim1180@gmail.com"
                   aria-label="Send an email"
                   onTransitionEnd={(event) => {
                     handleRoundButtonTransitionEnd(event.propertyName);
