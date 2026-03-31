@@ -93,14 +93,36 @@ const featuredProjects = [
     image: "/FS.png"
   },
 ] as const;
+const archivedProjects = [
+  {
+    year: "2024",
+    title: "Interface Studies",
+    summary:
+      "Motion, layout, and interaction experiments that informed later product work.",
+  },
+  {
+    year: "2024",
+    title: "Product Prototypes",
+    summary:
+      "Early validation builds focused on structure, messaging, and usability direction.",
+  },
+  {
+    year: "2023",
+    title: "Process Notes",
+    summary:
+      "Archived systems thinking, workflow sketches, and shipped iterations worth revisiting.",
+  },
+] as const;
 
 type ContactSwitcherStyle = CSSProperties & Record<`--${string}`, string>;
 type NameLockupStyle = CSSProperties & Record<`--${string}`, string>;
+type ArchivePanelStyle = CSSProperties & Record<`--${string}`, string>;
 
 export default function App() {
   const smoothScrollViewportRef = useRef<HTMLDivElement | null>(null);
   const smoothScrollShellRef = useRef<HTMLElement | null>(null);
   const smoothScrollContentRef = useRef<HTMLDivElement | null>(null);
+  const archiveSectionRef = useRef<HTMLElement | null>(null);
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const contactRef = useRef<HTMLAnchorElement | null>(null);
   const roundButtonRef = useRef<HTMLAnchorElement | null>(null);
@@ -117,6 +139,7 @@ export default function App() {
   const [isContactSwapped, setIsContactSwapped] = useState(false);
   const [isArrowBehind, setIsArrowBehind] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const [archiveRevealProgress, setArchiveRevealProgress] = useState(0);
   const [contactMetrics, setContactMetrics] = useState({
     pillWidth: 154,
     roundWidth: 64,
@@ -423,6 +446,61 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    let frameId = 0;
+
+    const updateArchiveProgress = () => {
+      frameId = 0;
+
+      const archiveSection = archiveSectionRef.current;
+
+      if (!archiveSection) {
+        return;
+      }
+
+      const sectionStart = archiveSection.offsetTop;
+      const sectionTravel = Math.max(
+        archiveSection.offsetHeight - window.innerHeight,
+        1
+      );
+      const nextProgress = Math.min(
+        Math.max((window.scrollY - sectionStart) / sectionTravel, 0),
+        1
+      );
+
+      setArchiveRevealProgress((currentProgress) => {
+        if (Math.abs(currentProgress - nextProgress) < 0.001) {
+          return currentProgress;
+        }
+
+        return nextProgress;
+      });
+    };
+
+    const requestArchiveProgressUpdate = () => {
+      if (frameId !== 0) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(updateArchiveProgress);
+    };
+
+    requestArchiveProgressUpdate();
+    window.addEventListener("scroll", requestArchiveProgressUpdate, {
+      passive: true,
+    });
+    window.addEventListener("resize", requestArchiveProgressUpdate);
+
+    return () => {
+      if (frameId !== 0) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      window.removeEventListener("scroll", requestArchiveProgressUpdate);
+      window.removeEventListener("resize", requestArchiveProgressUpdate);
+    };
+  }, []);
+
   const contactSwitcherStyle: ContactSwitcherStyle = {
     "--contact-pill-width": `${contactMetrics.pillWidth}px`,
     "--round-button-width": `${contactMetrics.roundWidth}px`,
@@ -437,6 +515,9 @@ export default function App() {
 
   const nameLockupStyle: NameLockupStyle = {
     "--hero-scroll-progress": heroScrollProgress.toFixed(3),
+  };
+  const archivePanelStyle: ArchivePanelStyle = {
+    "--archive-reveal-progress": archiveRevealProgress.toFixed(3),
   };
 
   const activeProject = featuredProjects[activeProjectIndex];
@@ -476,19 +557,24 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleProjectsLinkClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
+  const handleSectionLinkClick =
+    (sectionId: string, path: string) =>
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
 
-    const projectsSection = document.getElementById("projects");
+      const section = document.getElementById(sectionId);
 
-    if (!projectsSection) {
-      return;
-    }
+      if (!section) {
+        return;
+      }
 
-    const projectsTop = projectsSection.getBoundingClientRect().top + window.scrollY;
-    window.history.replaceState(null, "", "/projects");
-    window.scrollTo({ top: projectsTop, behavior: "smooth" });
-  };
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      window.history.replaceState(null, "", path);
+      window.scrollTo({ top: sectionTop, behavior: "smooth" });
+    };
+
+  const handleProjectsLinkClick = handleSectionLinkClick("projects", "/projects");
+  const handleArchiveLinkClick = handleSectionLinkClick("archive", "/archive");
 
   return (
     <>
@@ -513,6 +599,15 @@ export default function App() {
                     text={item}
                     href="/projects"
                     onClick={handleProjectsLinkClick}
+                    className="main-nav-link"
+                    enableWipe
+                  />
+                ) : item === "Archive" ? (
+                  <HoverRollLink
+                    key={item}
+                    text={item}
+                    href="/archive"
+                    onClick={handleArchiveLinkClick}
                     className="main-nav-link"
                     enableWipe
                   />
@@ -673,6 +768,52 @@ export default function App() {
                   </div>
                 </div>
               </article>
+            </section>
+            <section
+              ref={archiveSectionRef}
+              className="archive-section"
+              id="archive"
+              aria-labelledby="archive-title"
+            >
+              <div className="archive-stage">
+                <div className="archive-panel" style={archivePanelStyle}>
+                  <div className="archive-panel-inner">
+                    <div className="archive-preview">
+                      <p className="archive-preview-copy">
+                        Older experiments, prototypes, and process work collected in
+                        one place.
+                      </p>
+                      <ArrowUpRight
+                        className="archive-preview-icon"
+                        aria-hidden="true"
+                        size={26}
+                        strokeWidth={2}
+                      />
+                    </div>
+
+                    <div className="archive-heading">
+                      <p className="archive-kicker" id="archive-title">
+                        Archive
+                      </p>
+                      <h2>ARCHIVE</h2>
+                      <p className="archive-intro">
+                        Previous builds and exploratory work that still shape how I
+                        approach product, design, and implementation.
+                      </p>
+                    </div>
+
+                    <div className="archive-list" aria-label="Archived work">
+                      {archivedProjects.map((project) => (
+                        <article key={project.title} className="archive-item">
+                          <p className="archive-item-year">{project.year}</p>
+                          <h3>{project.title}</h3>
+                          <p>{project.summary}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </section>
           </div>
         </main>
