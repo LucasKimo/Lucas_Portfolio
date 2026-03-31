@@ -73,7 +73,7 @@ const featuredProjects = [
       "Improved workflow completion speed through guided interaction architecture",
     ],
     tags: ["JavaScript", "React", "Bootstrap", "Node.js"],
-    image: '/FS.png'
+    image: '/bionauts.png'
   },
   {
     id: "planary",
