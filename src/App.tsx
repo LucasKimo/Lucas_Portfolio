@@ -1,4 +1,4 @@
-import {
+﻿import {
   useEffect,
   useLayoutEffect,
   useRef,
@@ -222,6 +222,12 @@ export default function App() {
       return;
     }
 
+    // Cache elements for RAF-driven sticky behaviour
+    const projectsEl = document.getElementById("projects") as HTMLElement | null;
+    const archiveEl = archiveSectionRef.current;
+    const archiveStageEl =
+      archiveEl?.querySelector<HTMLElement>(".archive-stage") ?? null;
+
     let frameId = 0;
     const stiffness = 92;
     const damping = 22;
@@ -260,6 +266,31 @@ export default function App() {
 
       content.style.transform = `translate3d(0, ${-smoothScrollCurrentRef.current}px, 0)`;
 
+      // Manual sticky: freeze projects section at its visual position the moment archive starts revealing
+      if (projectsEl && archiveEl) {
+        const pinAt = archiveEl.offsetTop;
+        if (smoothScrollCurrentRef.current >= pinAt) {
+          projectsEl.style.transform = `translate3d(0, ${smoothScrollCurrentRef.current - pinAt}px, 0)`;
+        } else if (projectsEl.style.transform) {
+          projectsEl.style.transform = "";
+        }
+      }
+
+      // Manual sticky: keep archive stage pinned while inside its scroll range
+      if (archiveEl && archiveStageEl) {
+        const archiveTop = archiveEl.offsetTop;
+        const maxStick = Math.max(archiveEl.offsetHeight - window.innerHeight, 0);
+        if (smoothScrollCurrentRef.current >= archiveTop) {
+          const stickOffset = Math.min(
+            smoothScrollCurrentRef.current - archiveTop,
+            maxStick
+          );
+          archiveStageEl.style.transform = `translate3d(0, ${stickOffset}px, 0)`;
+        } else if (archiveStageEl.style.transform) {
+          archiveStageEl.style.transform = "";
+        }
+      }
+
       if (!isSettled) {
         frameId = window.requestAnimationFrame(animateViewport);
       }
@@ -287,6 +318,8 @@ export default function App() {
         smoothScrollLastTimeRef.current = null;
         content.style.transform = "";
         document.body.style.minHeight = "";
+        if (projectsEl) projectsEl.style.transform = "";
+        if (archiveStageEl) archiveStageEl.style.transform = "";
         return;
       }
 
@@ -324,6 +357,8 @@ export default function App() {
       smoothScrollLastTimeRef.current = null;
       content.style.transform = "";
       document.body.style.minHeight = "";
+      if (projectsEl) projectsEl.style.transform = "";
+      if (archiveStageEl) archiveStageEl.style.transform = "";
     };
   }, []);
 
@@ -459,10 +494,10 @@ export default function App() {
       }
 
       const sectionStart = archiveSection.offsetTop;
-      const sectionTravel = Math.max(
-        archiveSection.offsetHeight - window.innerHeight,
-        1
-      );
+      const projectsSection = document.getElementById("projects");
+      const sectionTravel = projectsSection
+        ? Math.max(projectsSection.offsetHeight, 1)
+        : Math.max(archiveSection.offsetHeight - window.innerHeight, 1);
       const nextProgress = Math.min(
         Math.max((window.scrollY - sectionStart) / sectionTravel, 0),
         1
