@@ -711,8 +711,8 @@ a {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: calc(var(--archive-panel-min) + (100vw - var(--archive-panel-min)) * var(--archive-reveal-progress));
-  height: calc(var(--archive-panel-min) + (100vh - var(--archive-panel-min)) * var(--archive-reveal-progress));
+  width: calc(var(--archive-panel-min) + (100vmin - var(--archive-panel-min)) * var(--archive-reveal-progress));
+  height: calc(var(--archive-panel-min) + (100vmin - var(--archive-panel-min)) * var(--archive-reveal-progress));
   background: #f4efe7;
   color: #07101c;
   border-radius: 0;

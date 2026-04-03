@@ -139,6 +139,8 @@ export default function App() {
   const [isContactSwapped, setIsContactSwapped] = useState(false);
   const [isArrowBehind, setIsArrowBehind] = useState(false);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
+  const [isCursorAtTop, setIsCursorAtTop] = useState(false);
+  const cursorTopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [archiveRevealProgress, setArchiveRevealProgress] = useState(0);
   const [contactMetrics, setContactMetrics] = useState({
     pillWidth: 154,
@@ -482,6 +484,34 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const handleGlobalMouseMove = (e: globalThis.MouseEvent) => {
+      if (e.clientY < 50) {
+        if (cursorTopTimerRef.current !== null) {
+          clearTimeout(cursorTopTimerRef.current);
+          cursorTopTimerRef.current = null;
+        }
+        setIsCursorAtTop(true);
+      } else if (isCursorAtTop) {
+        if (cursorTopTimerRef.current === null) {
+          cursorTopTimerRef.current = setTimeout(() => {
+            setIsCursorAtTop(false);
+            cursorTopTimerRef.current = null;
+          }, 1000);
+        }
+      }
+    };
+
+    window.addEventListener("mousemove", handleGlobalMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleGlobalMouseMove);
+      if (cursorTopTimerRef.current !== null) {
+        clearTimeout(cursorTopTimerRef.current);
+      }
+    };
+  }, [isCursorAtTop]);
+
+  useEffect(() => {
     let frameId = 0;
 
     const updateArchiveProgress = () => {
@@ -617,7 +647,7 @@ export default function App() {
       <WaveBackground src="/background.png" />
       <div ref={smoothScrollViewportRef} className="smooth-scroll-viewport">
         <main ref={smoothScrollShellRef} className="portfolio-shell">
-          <header className={`topbar${isHeaderHidden ? " is-hidden" : ""}`}>
+          <header className={`topbar${isHeaderHidden && !isCursorAtTop ? " is-hidden" : ""}`}>
             <a
               className="brand-mark"
               href="/"
