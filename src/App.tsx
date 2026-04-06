@@ -93,36 +93,44 @@ const featuredProjects = [
     image: "/FS.png"
   },
 ] as const;
-const archivedProjects = [
+
+const archiveProjects = [
+  { year: "2025", name: "Future Scope", builtAt: "Code Network Hackathon", builtWith: ["React", "Node.js", "OpenAI API"], link: "https://github.com/LucasKimo" },
+  { year: "2025", name: "Bionauts", builtAt: "QUT", builtWith: ["React", "Bootstrap", "Node.js"], link: "https://github.com/LucasKimo" },
+  { year: "2025", name: "Planary", builtAt: "Personal", builtWith: ["React", "TypeScript", "PostgreSQL"], link: null },
+  { year: "2024", name: "Campus Connect", builtAt: "QUT", builtWith: ["Vue.js", "Firebase"], link: null },
+  { year: "2024", name: "Study Tracker", builtAt: "Personal", builtWith: ["React", "LocalStorage"], link: "https://github.com/LucasKimo" },
+  { year: "2024", name: "Weather Dashboard", builtAt: "Personal", builtWith: ["JavaScript", "OpenWeather API"], link: "https://github.com/LucasKimo" },
+  { year: "2023", name: "Portfolio v1", builtAt: "Personal", builtWith: ["HTML", "CSS", "JavaScript"], link: "https://github.com/LucasKimo" },
+  { year: "2023", name: "Task Manager CLI", builtAt: "Personal", builtWith: ["Python", "SQLite"], link: null },
+] as const;
+
+const skillCategories = [
   {
-    year: "2024",
-    title: "Interface Studies",
-    summary:
-      "Motion, layout, and interaction experiments that informed later product work.",
+    label: "Languages",
+    skills: ["JavaScript", "TypeScript", "Python", "HTML", "CSS", "SQL"],
   },
   {
-    year: "2024",
-    title: "Product Prototypes",
-    summary:
-      "Early validation builds focused on structure, messaging, and usability direction.",
+    label: "Frameworks & Libraries",
+    skills: ["React", "Node.js", "Express", "Bootstrap", "Tailwind CSS"],
   },
   {
-    year: "2023",
-    title: "Process Notes",
-    summary:
-      "Archived systems thinking, workflow sketches, and shipped iterations worth revisiting.",
+    label: "Tools & Platforms",
+    skills: ["Git", "GitHub", "Figma", "VS Code", "AWS", "Vercel"],
+  },
+  {
+    label: "Databases",
+    skills: ["PostgreSQL", "MySQL", "Firebase", "SQLite"],
   },
 ] as const;
 
 type ContactSwitcherStyle = CSSProperties & Record<`--${string}`, string>;
 type NameLockupStyle = CSSProperties & Record<`--${string}`, string>;
-type ArchivePanelStyle = CSSProperties & Record<`--${string}`, string>;
 
 export default function App() {
   const smoothScrollViewportRef = useRef<HTMLDivElement | null>(null);
   const smoothScrollShellRef = useRef<HTMLElement | null>(null);
   const smoothScrollContentRef = useRef<HTMLDivElement | null>(null);
-  const archiveSectionRef = useRef<HTMLElement | null>(null);
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const contactRef = useRef<HTMLAnchorElement | null>(null);
   const roundButtonRef = useRef<HTMLAnchorElement | null>(null);
@@ -141,7 +149,6 @@ export default function App() {
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isCursorAtTop, setIsCursorAtTop] = useState(false);
   const cursorTopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [archiveRevealProgress, setArchiveRevealProgress] = useState(0);
   const [contactMetrics, setContactMetrics] = useState({
     pillWidth: 154,
     roundWidth: 64,
@@ -224,12 +231,6 @@ export default function App() {
       return;
     }
 
-    // Cache elements for RAF-driven sticky behaviour
-    const projectsEl = document.getElementById("projects") as HTMLElement | null;
-    const archiveEl = archiveSectionRef.current;
-    const archiveStageEl =
-      archiveEl?.querySelector<HTMLElement>(".archive-stage") ?? null;
-
     let frameId = 0;
     const stiffness = 92;
     const damping = 22;
@@ -268,31 +269,6 @@ export default function App() {
 
       content.style.transform = `translate3d(0, ${-smoothScrollCurrentRef.current}px, 0)`;
 
-      // Manual sticky: freeze projects section at its visual position the moment archive starts revealing
-      if (projectsEl && archiveEl) {
-        const pinAt = archiveEl.offsetTop;
-        if (smoothScrollCurrentRef.current >= pinAt) {
-          projectsEl.style.transform = `translate3d(0, ${smoothScrollCurrentRef.current - pinAt}px, 0)`;
-        } else if (projectsEl.style.transform) {
-          projectsEl.style.transform = "";
-        }
-      }
-
-      // Manual sticky: keep archive stage pinned while inside its scroll range
-      if (archiveEl && archiveStageEl) {
-        const archiveTop = archiveEl.offsetTop;
-        const maxStick = Math.max(archiveEl.offsetHeight - window.innerHeight, 0);
-        if (smoothScrollCurrentRef.current >= archiveTop) {
-          const stickOffset = Math.min(
-            smoothScrollCurrentRef.current - archiveTop,
-            maxStick
-          );
-          archiveStageEl.style.transform = `translate3d(0, ${stickOffset}px, 0)`;
-        } else if (archiveStageEl.style.transform) {
-          archiveStageEl.style.transform = "";
-        }
-      }
-
       if (!isSettled) {
         frameId = window.requestAnimationFrame(animateViewport);
       }
@@ -320,8 +296,6 @@ export default function App() {
         smoothScrollLastTimeRef.current = null;
         content.style.transform = "";
         document.body.style.minHeight = "";
-        if (projectsEl) projectsEl.style.transform = "";
-        if (archiveStageEl) archiveStageEl.style.transform = "";
         return;
       }
 
@@ -359,8 +333,6 @@ export default function App() {
       smoothScrollLastTimeRef.current = null;
       content.style.transform = "";
       document.body.style.minHeight = "";
-      if (projectsEl) projectsEl.style.transform = "";
-      if (archiveStageEl) archiveStageEl.style.transform = "";
     };
   }, []);
 
@@ -511,61 +483,6 @@ export default function App() {
     };
   }, [isCursorAtTop]);
 
-  useEffect(() => {
-    let frameId = 0;
-
-    const updateArchiveProgress = () => {
-      frameId = 0;
-
-      const archiveSection = archiveSectionRef.current;
-
-      if (!archiveSection) {
-        return;
-      }
-
-      const sectionStart = archiveSection.offsetTop;
-      const projectsSection = document.getElementById("projects");
-      const sectionTravel = projectsSection
-        ? Math.max(projectsSection.offsetHeight, 1)
-        : Math.max(archiveSection.offsetHeight - window.innerHeight, 1);
-      const nextProgress = Math.min(
-        Math.max((window.scrollY - sectionStart) / sectionTravel, 0),
-        1
-      );
-
-      setArchiveRevealProgress((currentProgress) => {
-        if (Math.abs(currentProgress - nextProgress) < 0.001) {
-          return currentProgress;
-        }
-
-        return nextProgress;
-      });
-    };
-
-    const requestArchiveProgressUpdate = () => {
-      if (frameId !== 0) {
-        return;
-      }
-
-      frameId = window.requestAnimationFrame(updateArchiveProgress);
-    };
-
-    requestArchiveProgressUpdate();
-    window.addEventListener("scroll", requestArchiveProgressUpdate, {
-      passive: true,
-    });
-    window.addEventListener("resize", requestArchiveProgressUpdate);
-
-    return () => {
-      if (frameId !== 0) {
-        window.cancelAnimationFrame(frameId);
-      }
-
-      window.removeEventListener("scroll", requestArchiveProgressUpdate);
-      window.removeEventListener("resize", requestArchiveProgressUpdate);
-    };
-  }, []);
-
   const contactSwitcherStyle: ContactSwitcherStyle = {
     "--contact-pill-width": `${contactMetrics.pillWidth}px`,
     "--round-button-width": `${contactMetrics.roundWidth}px`,
@@ -580,9 +497,6 @@ export default function App() {
 
   const nameLockupStyle: NameLockupStyle = {
     "--hero-scroll-progress": heroScrollProgress.toFixed(3),
-  };
-  const archivePanelStyle: ArchivePanelStyle = {
-    "--archive-reveal-progress": archiveRevealProgress.toFixed(3),
   };
 
   const activeProject = featuredProjects[activeProjectIndex];
@@ -640,6 +554,8 @@ export default function App() {
 
   const handleProjectsLinkClick = handleSectionLinkClick("projects", "/projects");
   const handleArchiveLinkClick = handleSectionLinkClick("archive", "/archive");
+  const handleSkillsLinkClick = handleSectionLinkClick("skills", "/skills");
+  const handleAboutLinkClick = handleSectionLinkClick("about", "/about");
 
   return (
     <>
@@ -673,6 +589,24 @@ export default function App() {
                     text={item}
                     href="/archive"
                     onClick={handleArchiveLinkClick}
+                    className="main-nav-link"
+                    enableWipe
+                  />
+                ) : item === "Skills" ? (
+                  <HoverRollLink
+                    key={item}
+                    text={item}
+                    href="/skills"
+                    onClick={handleSkillsLinkClick}
+                    className="main-nav-link"
+                    enableWipe
+                  />
+                ) : item === "About" ? (
+                  <HoverRollLink
+                    key={item}
+                    text={item}
+                    href="/about"
+                    onClick={handleAboutLinkClick}
                     className="main-nav-link"
                     enableWipe
                   />
@@ -834,49 +768,109 @@ export default function App() {
                 </div>
               </article>
             </section>
-            <section
-              ref={archiveSectionRef}
-              className="archive-section"
-              id="archive"
-              aria-labelledby="archive-title"
-            >
-              <div className="archive-stage">
-                <div className="archive-panel" style={archivePanelStyle}>
-                  <div className="archive-panel-inner">
-                    <div className="archive-preview">
-                      <p className="archive-preview-copy">
-                        Older experiments, prototypes, and process work collected in
-                        one place.
-                      </p>
-                      <ArrowUpRight
-                        className="archive-preview-icon"
-                        aria-hidden="true"
-                        size={26}
-                        strokeWidth={2}
-                      />
-                    </div>
 
-                    <div className="archive-heading">
-                      <p className="archive-kicker" id="archive-title">
-                        Archive
-                      </p>
-                      <h2>ARCHIVE</h2>
-                      <p className="archive-intro">
-                        Previous builds and exploratory work that still shape how I
-                        approach product, design, and implementation.
-                      </p>
-                    </div>
+            {/* Archive Section */}
+            <section className="archive-section" id="archive" aria-labelledby="archive-title">
+              <div className="section-header">
+                <p className="section-eyebrow" id="archive-title">Archive</p>
+                <p className="section-sub">A collection of things I've built over the years.</p>
+              </div>
+              <table className="archive-table">
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>Project</th>
+                    <th>Built At</th>
+                    <th>Built With</th>
+                    <th>Link</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {archiveProjects.map((project) => (
+                    <tr key={`${project.year}-${project.name}`}>
+                      <td className="archive-year">{project.year}</td>
+                      <td className="archive-name">{project.name}</td>
+                      <td className="archive-built-at">{project.builtAt}</td>
+                      <td className="archive-tags">
+                        {project.builtWith.map((tech) => (
+                          <span key={tech}>{tech}</span>
+                        ))}
+                      </td>
+                      <td className="archive-link">
+                        {project.link ? (
+                          <a href={project.link} target="_blank" rel="noreferrer" aria-label={`View ${project.name} on GitHub`}>
+                            <ArrowUpRight size={16} strokeWidth={2} aria-hidden="true" />
+                          </a>
+                        ) : (
+                          <span className="archive-link-empty">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
 
-                    <div className="archive-list" aria-label="Archived work">
-                      {archivedProjects.map((project) => (
-                        <article key={project.title} className="archive-item">
-                          <p className="archive-item-year">{project.year}</p>
-                          <h3>{project.title}</h3>
-                          <p>{project.summary}</p>
-                        </article>
+            {/* Skills Section */}
+            <section className="skills-section" id="skills" aria-labelledby="skills-title">
+              <div className="section-header">
+                <p className="section-eyebrow" id="skills-title">Skills</p>
+                <p className="section-sub">Technologies and tools I work with.</p>
+              </div>
+              <div className="skills-grid">
+                {skillCategories.map((category) => (
+                  <div key={category.label} className="skill-category">
+                    <p className="skill-category-label">{category.label}</p>
+                    <ul className="skill-list">
+                      {category.skills.map((skill) => (
+                        <li key={skill} className="skill-item">{skill}</li>
                       ))}
-                    </div>
+                    </ul>
                   </div>
+                ))}
+              </div>
+            </section>
+
+            {/* About Section */}
+            <section className="about-section" id="about" aria-labelledby="about-title">
+              <div className="section-header">
+                <p className="section-eyebrow" id="about-title">About</p>
+              </div>
+              <div className="about-layout">
+                <div className="about-copy">
+                  <h2 className="about-heading">Hey, I'm Lucas.</h2>
+                  <p>
+                    I'm a software engineer based in Brisbane, Australia, with a passion for building
+                    clean, high-impact digital experiences. I bridge the gap between real-world problems
+                    and elegant technical solutions.
+                  </p>
+                  <p>
+                    Currently studying at QUT and working on projects that range from hackathon wins
+                    to personal tools I actually use. I care deeply about user experience, code quality,
+                    and shipping things that matter.
+                  </p>
+                  <p>
+                    Outside of code, I'm into design, music, and exploring what's possible at the
+                    intersection of technology and creativity.
+                  </p>
+                  <div className="about-links">
+                    {socialLinks.map(({ href, label, icon: Icon }) => (
+                      <a
+                        key={label}
+                        className="text-link"
+                        href={href}
+                        target={href.startsWith("http") ? "_blank" : undefined}
+                        rel={href.startsWith("http") ? "noreferrer" : undefined}
+                      >
+                        <Icon className="text-link-icon" aria-hidden="true" size={16} strokeWidth={2} />
+                        <span>{label}</span>
+                        <ArrowUpRight aria-hidden="true" size={16} strokeWidth={2} />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                <div className="about-photo" aria-hidden="true">
+                  <div className="about-photo-placeholder" />
                 </div>
               </div>
             </section>
