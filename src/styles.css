@@ -1349,6 +1349,63 @@ a {
   }
 }
 
+/* ── Footer ─────────────────────────────────────────────── */
+.site-footer {
+  background: #000;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2.5rem calc(var(--shell-padding-inline, 12px) + 2.5rem);
+  margin-inline: calc(-1 * var(--shell-padding-inline, 12px));
+  margin-bottom: calc(-1 * clamp(20px, 2.2vw, 28px));
+  color: #fff;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-brand {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.footer-brand:hover {
+  opacity: 0.7;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.footer-link:hover {
+  opacity: 0.7;
+}
+
+.footer-copy {
+  font-size: 0.7rem;
+  color: #fff;
+  margin: 0;
+}
+
 
 
 
