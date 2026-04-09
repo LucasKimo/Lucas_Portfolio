@@ -149,6 +149,7 @@ export default function App() {
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isCursorAtTop, setIsCursorAtTop] = useState(false);
   const cursorTopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const headerHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [contactMetrics, setContactMetrics] = useState({
     pillWidth: 154,
     roundWidth: 64,
@@ -433,14 +434,29 @@ export default function App() {
     const updateHeaderVisibility = () => {
       const currentScrollY = window.scrollY;
       const scrollDelta = currentScrollY - headerLastScrollYRef.current;
-      const isInOtherSections = currentScrollY >= projectsStartRef.current; // ← reads updated value
+      const isInOtherSections = currentScrollY >= projectsStartRef.current;
 
       if (!isInOtherSections || currentScrollY <= 0) {
+        if (headerHideTimerRef.current !== null) {
+          clearTimeout(headerHideTimerRef.current);
+          headerHideTimerRef.current = null;
+        }
         setIsHeaderHidden(false);
       } else if (scrollDelta > 2) {
+        if (headerHideTimerRef.current !== null) {
+          clearTimeout(headerHideTimerRef.current);
+          headerHideTimerRef.current = null;
+        }
         setIsHeaderHidden(true);
       } else if (scrollDelta < -2) {
         setIsHeaderHidden(false);
+        if (headerHideTimerRef.current !== null) {
+          clearTimeout(headerHideTimerRef.current);
+        }
+        headerHideTimerRef.current = setTimeout(() => {
+          setIsHeaderHidden(true);
+          headerHideTimerRef.current = null;
+        }, 1500);
       }
 
       headerLastScrollYRef.current = currentScrollY;
@@ -452,6 +468,9 @@ export default function App() {
     return () => {
       window.removeEventListener("scroll", updateHeaderVisibility);
       window.removeEventListener("resize", calcProjectsStart);
+      if (headerHideTimerRef.current !== null) {
+        clearTimeout(headerHideTimerRef.current);
+      }
     };
   }, []);
 
