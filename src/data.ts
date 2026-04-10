@@ -60,14 +60,11 @@ export const featuredProjects = [
 ] as const;
 
 export const archiveProjects = [
-  { year: "2025", name: "Future Scope", builtAt: "Code Network Hackathon", builtWith: ["React", "Node.js", "OpenAI API"], link: "https://github.com/LucasKimo" },
-  { year: "2025", name: "Bionauts", builtAt: "QUT", builtWith: ["React", "Bootstrap", "Node.js"], link: "https://github.com/LucasKimo" },
-  { year: "2025", name: "Planary", builtAt: "Personal", builtWith: ["React", "TypeScript", "PostgreSQL"], link: null },
-  { year: "2024", name: "Campus Connect", builtAt: "QUT", builtWith: ["Vue.js", "Firebase"], link: null },
-  { year: "2024", name: "Study Tracker", builtAt: "Personal", builtWith: ["React", "LocalStorage"], link: "https://github.com/LucasKimo" },
-  { year: "2024", name: "Weather Dashboard", builtAt: "Personal", builtWith: ["JavaScript", "OpenWeather API"], link: "https://github.com/LucasKimo" },
-  { year: "2023", name: "Portfolio v1", builtAt: "Personal", builtWith: ["HTML", "CSS", "JavaScript"], link: "https://github.com/LucasKimo" },
-  { year: "2023", name: "Task Manager CLI", builtAt: "Personal", builtWith: ["Python", "SQLite"], link: null },
+  { year: "Present", title: "Planary", location: "Personal", details: ["React", "TypeScript", "PostgreSQL"], link: null },
+  { year: "2025", title: "Bachelor of IT", location: "Queensland University of Technology", details: ["Computer Science", "GPA: 5.5"], link: "https://github.com/LucasKimo" },
+  { year: "2025", title: "Bionauts", location: "Queensland University of Technology", details: ["React", "Bootstrap", "Node.js"], link: "https://github.com/LucasKimo" },
+  { year: "2025", title: "Future Scope", location: "Code Network Hackathon, QUT", details: ["JavaScript", "React", "Node.js", "AWS", "OpenAI API"], link: "https://github.com/LucasKimo" },
+  { year: "2024", title: "Diploma in IT", location: "Queensland University of Technology", details: ["Python", "C#", "App Development", "SQL"], link: "https://github.com/LucasKimo" },
 ] as const;
 
 export const skillCategories = [
