@@ -47,7 +47,7 @@ a {
 }
 
 .portfolio-shell {
-  --shell-padding-inline: clamp(8px, 1vw, 12px);
+  --shell-padding-inline: clamp(16px, 3vw, 80px);
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
@@ -1067,7 +1067,6 @@ a {
 
 @media (max-width: 720px) {
   .portfolio-shell {
-    --shell-padding-inline: 16px;
     padding: 18px var(--shell-padding-inline) 20px;
   }
 
@@ -1187,11 +1186,6 @@ a {
 }
 
 @media (min-width: 1600px) {
-  .portfolio-shell {
-    --shell-padding-inline: clamp(24px, 2.4vw, 48px);
-    padding-inline: var(--shell-padding-inline);
-  }
-
   .hero-layout {
     grid-template-columns: minmax(0, 1fr) minmax(0, 34vw);
   }
