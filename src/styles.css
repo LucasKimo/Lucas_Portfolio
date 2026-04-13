@@ -92,6 +92,32 @@ a {
   pointer-events: none;
 }
 
+.topbar::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * clamp(18px, 2vw, 24px));
+  left: calc(-1 * var(--shell-padding-inline, 12px));
+  right: calc(-1 * var(--shell-padding-inline, 12px));
+  bottom: calc(-1 * clamp(18px, 2vw, 24px));
+  background: transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  border-bottom: 1px solid transparent;
+  z-index: -1;
+  pointer-events: none;
+  transition:
+    background 300ms ease,
+    backdrop-filter 300ms ease,
+    border-color 300ms ease;
+}
+
+.topbar.is-blurred::before {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
 .brand-mark {
   display: inline-flex;
   align-items: center;
@@ -742,7 +768,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-soft);
+  color: var(--text-primary);
 }
 
 .archive-table th:first-child {
@@ -789,7 +815,8 @@ a {
   color: var(--text-primary);
 }
 
-.archive-built-at {
+.archive-built-at,
+.archive-category {
   color: var(--text-soft);
 }
 

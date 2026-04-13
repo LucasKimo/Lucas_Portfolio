@@ -13,7 +13,8 @@ export default function MilestoneSection() {
           <tr>
             <th>Year</th>
             <th>Title</th>
-            <th>Location</th>
+            <th>Category</th>
+            <th>Organization</th>
             <th>Details</th>
             <th>Link</th>
           </tr>
@@ -23,7 +24,8 @@ export default function MilestoneSection() {
             <tr key={`${project.year}-${project.title}`}>
               <td className="archive-year">{project.year}</td>
               <td className="archive-name">{project.title}</td>
-              <td className="archive-built-at">{project.location}</td>
+              <td className="archive-category">{project.category}</td>
+              <td className="archive-built-at">{project.organization}</td>
               <td className="archive-tags">
                 {project.details.map((tech) => (
                   <span key={tech}>{tech}</span>

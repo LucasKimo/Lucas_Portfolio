@@ -15,9 +15,10 @@ type ContactSwitcherStyle = CSSProperties & Record<`--${string}`, string>;
 interface HeaderProps {
   isHeaderHidden: boolean;
   isCursorAtTop: boolean;
+  isScrolledPastHero: boolean;
 }
 
-export default function Header({ isHeaderHidden, isCursorAtTop }: HeaderProps) {
+export default function Header({ isHeaderHidden, isCursorAtTop, isScrolledPastHero }: HeaderProps) {
   const switcherRef = useRef<HTMLDivElement | null>(null);
   const contactRef = useRef<HTMLAnchorElement | null>(null);
   const roundButtonRef = useRef<HTMLAnchorElement | null>(null);
@@ -129,7 +130,7 @@ export default function Header({ isHeaderHidden, isCursorAtTop }: HeaderProps) {
   };
 
   return (
-    <header className={`topbar${isHeaderHidden && !isCursorAtTop ? " is-hidden" : ""}`}>
+    <header className={`topbar${isHeaderHidden && !isCursorAtTop ? " is-hidden" : ""}${isScrolledPastHero ? " is-blurred" : ""}`}>
       <a
         className="brand-mark"
         href="/"

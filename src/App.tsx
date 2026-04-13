@@ -27,6 +27,7 @@ export default function App() {
   const [heroScrollProgress, setHeroScrollProgress] = useState(0);
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isCursorAtTop, setIsCursorAtTop] = useState(false);
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
 
   // Smooth scroll
   useEffect(() => {
@@ -204,6 +205,8 @@ export default function App() {
       const scrollDelta = currentScrollY - headerLastScrollYRef.current;
       const isInOtherSections = currentScrollY >= projectsStartRef.current;
 
+      setIsScrolledPastHero(isInOtherSections && currentScrollY > 0);
+
       if (!isInOtherSections || currentScrollY <= 0) {
         if (headerHideTimerRef.current !== null) {
           clearTimeout(headerHideTimerRef.current);
@@ -276,7 +279,7 @@ export default function App() {
       <WaveBackground src="/background.png" />
       <div ref={smoothScrollViewportRef} className="smooth-scroll-viewport">
         <main ref={smoothScrollShellRef} className="portfolio-shell">
-          <Header isHeaderHidden={isHeaderHidden} isCursorAtTop={isCursorAtTop} />
+          <Header isHeaderHidden={isHeaderHidden} isCursorAtTop={isCursorAtTop} isScrolledPastHero={isScrolledPastHero} />
           <div ref={smoothScrollContentRef} className="smooth-scroll-content">
             <HeroSection heroScrollProgress={heroScrollProgress} />
             <ProjectsSection />

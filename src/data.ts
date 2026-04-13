@@ -60,11 +60,13 @@ export const featuredProjects = [
 ] as const;
 
 export const archiveProjects = [
-  { year: "Present", title: "Planary", location: "Personal", details: ["React", "TypeScript", "PostgreSQL"], link: null },
-  { year: "2025", title: "Bachelor of IT", location: "Queensland University of Technology", details: ["Computer Science", "GPA: 5.5"], link: "https://github.com/LucasKimo" },
-  { year: "2025", title: "Bionauts", location: "Queensland University of Technology", details: ["React", "Bootstrap", "Node.js"], link: "https://github.com/LucasKimo" },
-  { year: "2025", title: "Future Scope", location: "Code Network Hackathon, QUT", details: ["JavaScript", "React", "Node.js", "AWS", "OpenAI API"], link: "https://github.com/LucasKimo" },
-  { year: "2024", title: "Diploma in IT", location: "Queensland University of Technology", details: ["Python", "C#", "App Development", "SQL"], link: "https://github.com/LucasKimo" },
+  { year: "Present", title: "Planary", category: "Project", organization: "Personal", details: ["React Native", "Java", "PostgreSQL"], link: null },
+  { year: "2025", title: "Bachelor of IT", category: "Education", organization: "Queensland University of Technology", details: ["Computer Science"], link: null },
+  { year: "2025", title: "Front-end Developer", category: "Experience", organization: "Bionauts, QUT", details: ["React", "Bootstrap", "Node.js"], link: null },
+  { year: "2025", title: "Future Scope", category: "Award", organization: "Code Network Hackathon, QUT", details: ["JavaScript", "React", "Node.js", "AWS", "OpenAI API"], link: "https://www.qut.edu.au/about/faculty-of-science/insights/hacking-ambition-into-action-code-networks-2025-winter-hackathon" },
+  { year: "2025", title: "Azure Data Fundamentals", category: "Certification", organization: "Microsoft", details: ["Azure", "Databricks", "Power BI", "Cloud", "Cosmos DB", "SQL"], link: "https://www.credly.com/badges/e33a9d27-e67a-4af0-bcb2-f4b543b2102d" },
+  { year: "2025", title: "Azure AI Fundamentals", category: "Certification", organization: "Microsoft", details: ["Azure", "Bot Service", "Machine Learning", "Cognitive Services", "AI"], link: "https://www.credly.com/badges/dbceeab4-7a7e-470c-9881-b9b5a725b47a" },
+  { year: "2024", title: "Diploma in IT", category: "Education", organization: "Queensland University of Technology", details: ["Python", "C#", "App Development", "SQL"], link: null },
 ] as const;
 
 export const skillCategories = [
