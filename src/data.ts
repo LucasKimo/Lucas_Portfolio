@@ -61,17 +61,18 @@ export const featuredProjects = [
 
 export const archiveProjects = [
   { year: "Present", title: "Planary", category: "Project", organization: "Personal", details: ["React Native", "Java", "PostgreSQL"], link: null },
-  { year: "2025", title: "Bachelor of IT", category: "Education", organization: "Queensland University of Technology", details: ["Computer Science"], link: null },
+  { year: "2025", title: "Bachelor of IT", category: "Education", organization: "Queensland University of Technology", details: ["Computer Science"], link: "/Bachelor.pdf" },
   { year: "2025", title: "Front-end Developer", category: "Experience", organization: "Bionauts, QUT", details: ["React", "Bootstrap", "Node.js"], link: null },
   { year: "2025", title: "Future Scope", category: "Award", organization: "Code Network Hackathon, QUT", details: ["JavaScript", "React", "Node.js", "AWS", "OpenAI API"], link: "https://www.qut.edu.au/about/faculty-of-science/insights/hacking-ambition-into-action-code-networks-2025-winter-hackathon" },
   { year: "2025", title: "Azure Data Fundamentals", category: "Certification", organization: "Microsoft", details: ["Azure", "Databricks", "Power BI", "Cloud", "Cosmos DB", "SQL"], link: "https://www.credly.com/badges/e33a9d27-e67a-4af0-bcb2-f4b543b2102d" },
   { year: "2025", title: "Azure AI Fundamentals", category: "Certification", organization: "Microsoft", details: ["Azure", "Bot Service", "Machine Learning", "Cognitive Services", "AI"], link: "https://www.credly.com/badges/dbceeab4-7a7e-470c-9881-b9b5a725b47a" },
-  { year: "2024", title: "Diploma in IT", category: "Education", organization: "Queensland University of Technology", details: ["Python", "C#", "App Development", "SQL"], link: null },
+  { year: "2024", title: "Executive Deans' Award", category: "Award", organization: "Queensland University of Technology", details: ["QUT Executive Deans' Commendation for Academic Excellence"], link: "/Executive_Deans.pdf" },
+  { year: "2024", title: "Diploma in IT", category: "Education", organization: "Queensland University of Technology", details: ["Python", "C#", "App Development", "SQL"], link: "/Diploma.pdf" },
 ] as const;
 
 export const skillCategories = [
-  { label: "Languages", skills: ["JavaScript", "TypeScript", "Python", "HTML", "CSS", "SQL"] },
+  { label: "Languages", skills: ["JavaScript", "TypeScript", "Java", "Python", "HTML", "CSS", "SQL"] },
   { label: "Frameworks & Libraries", skills: ["React", "Node.js", "Express", "Bootstrap", "Tailwind CSS"] },
-  { label: "Tools & Platforms", skills: ["Git", "GitHub", "Figma", "VS Code", "AWS", "Vercel"] },
-  { label: "Databases", skills: ["PostgreSQL", "MySQL", "Firebase", "SQLite"] },
+  { label: "Tools & Platforms", skills: ["Git", "GitHub", "AWS", "Azure", "Jupyter Notebook", "Vercel", "Claude"] },
+  { label: "Databases", skills: ["PostgreSQL", "MySQL", "SQLite", "Azure Cosmos DB", "Maria DB"] },
 ] as const;

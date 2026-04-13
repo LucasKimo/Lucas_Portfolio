@@ -5,7 +5,6 @@ export default function SkillsSection() {
     <section className="skills-section" id="skills" aria-labelledby="skills-title">
       <div className="section-header">
         <p className="section-eyebrow" id="skills-title">Skills</p>
-        <p className="section-sub">Technologies and tools I work with.</p>
       </div>
       <div className="skills-grid">
         {skillCategories.map((category) => (
