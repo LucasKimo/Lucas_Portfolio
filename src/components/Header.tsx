@@ -76,7 +76,16 @@ export default function Header({ isHeaderHidden, isCursorAtTop }: HeaderProps) {
       event.preventDefault();
       const section = document.getElementById(sectionId);
       if (!section) return;
-      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      // getBoundingClientRect() is affected by the smooth-scroll spring transform.
+      // Read the actual current translateY from the content element so the target
+      // is correct even if the animation hasn't settled yet.
+      const contentEl = document.querySelector<HTMLElement>(".smooth-scroll-content");
+      const translateY = contentEl
+        ? new DOMMatrix(getComputedStyle(contentEl).transform).m42
+        : -window.scrollY;
+      // transform is translate3d(0, -currentScroll, 0) → m42 = -currentScroll
+      // trueLayoutTop = rect.top - translateY = rect.top + currentScroll
+      const sectionTop = section.getBoundingClientRect().top - translateY;
       window.history.replaceState(null, "", path);
       window.scrollTo({ top: sectionTop, behavior: "smooth" });
     };

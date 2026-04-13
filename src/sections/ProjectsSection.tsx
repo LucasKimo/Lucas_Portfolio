@@ -1,4 +1,5 @@
 import { useRef, useState, type MouseEvent } from "react";
+import { createPortal } from "react-dom";
 import { featuredProjects } from "../data";
 
 export default function ProjectsSection() {
@@ -29,7 +30,10 @@ export default function ProjectsSection() {
 
   return (
     <>
-      <div ref={cursorRef} className="visual-cursor">VIEW</div>
+      {createPortal(
+        <div ref={cursorRef} className="visual-cursor">VIEW</div>,
+        document.body
+      )}
       <section className="projects-section" id="projects" aria-labelledby="projects-title">
         <div className="projects-topbar">
           <p className="projects-eyebrow" id="projects-title">Selected Work</p>
