@@ -155,8 +155,7 @@ export default function Header({ isHeaderHidden, isCursorAtTop, isScrolledPastHe
         )}
       </nav>
       <div className="topbar-actions">
-        <a className="locale-switch" href="/contact">EN</a>
-        <div
+<div
           ref={switcherRef}
           className={`contact-switcher${isContactSwapped ? " is-swapped" : ""}${isArrowBehind ? " is-arrow-behind" : ""}`}
           style={contactSwitcherStyle}

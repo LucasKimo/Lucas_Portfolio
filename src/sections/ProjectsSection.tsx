@@ -49,9 +49,6 @@ export default function ProjectsSection() {
               </button>
             ))}
           </nav>
-          <a className="projects-all-link" href="/projects">
-            See All Projects <span aria-hidden="true">→</span>
-          </a>
         </div>
 
         <article

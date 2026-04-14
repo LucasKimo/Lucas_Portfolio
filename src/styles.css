@@ -354,7 +354,7 @@ a {
   font-weight: 400;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(251, 248, 242, 0.66);
+  color: #ffffff;
 }
 
 .hero-statement {
@@ -980,6 +980,24 @@ a {
   font-size: clamp(0.85rem, 1.1vw, 1rem);
   line-height: 1.6;
   color: #ffffff;
+}
+
+.about-bio {
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.5;
+  color: #ffffff;
+  margin: 0;
+  padding-top: clamp(16px, 3vmin, 28px);
+}
+
+.about-yt-link {
+  color: var(--text-soft);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.about-yt-link:hover {
+  color: var(--text-primary);
 }
 
 @media (max-width: 860px) {

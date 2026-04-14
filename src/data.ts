@@ -41,26 +41,9 @@ export const featuredProjects = [
     tags: ["JavaScript", "React", "Bootstrap", "Node.js"],
     image: "/bionauts.png",
   },
-  {
-    id: "planary",
-    name: "Planary",
-    roleTitle: "Full-stack Developer",
-    region: "Brisbane",
-    scope: "Personal Project",
-    timeline: "2025 - Present",
-    summary: "Shaping conversational-care products that help clinical teams monitor patients at scale.",
-    bullets: [
-      "Designed triage experiences balancing clarity, urgency, and trust",
-      "Created reusable voice-assistant interaction patterns for care journeys",
-      "Aligned product, data, and clinical stakeholders around measurable UX outcomes",
-    ],
-    tags: ["HEALTHTECH", "VOICE", "PATIENTCARE"],
-    image: "/FS.png",
-  },
 ] as const;
 
 export const archiveProjects = [
-  { year: "Present", title: "Planary", category: "Project", organization: "Personal", details: ["React Native", "Java", "PostgreSQL"], link: null },
   { year: "2025", title: "Bachelor of IT", category: "Education", organization: "Queensland University of Technology", details: ["Computer Science"], link: "/Bachelor.pdf" },
   { year: "2025", title: "Front-end Developer", category: "Experience", organization: "Bionauts, QUT", details: ["React", "Bootstrap", "Node.js"], link: null },
   { year: "2025", title: "Future Scope", category: "Award", organization: "Code Network Hackathon, QUT", details: ["JavaScript", "React", "Node.js", "AWS", "OpenAI API"], link: "https://www.qut.edu.au/about/faculty-of-science/insights/hacking-ambition-into-action-code-networks-2025-winter-hackathon" },
