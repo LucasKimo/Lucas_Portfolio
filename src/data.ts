@@ -43,7 +43,8 @@ export const featuredProjects = [
   },
 ] as const;
 
-export const archiveProjects = [
+export const milestones = [
+  { year: "2026", title: "Power Platform Fundamentals", category: "Certification", organization: "Microsoft", details: ["Power Platform", "Power Apps", "Power Automate", "Power Pages", "Dataverse", "Power BI"], link: "https://learn.microsoft.com/api/credentials/share/en-us/15097636/2FB9F4B39ABE15DB?sharingId=B1ABECB15B13FB17" },
   { year: "2025", title: "Bachelor of IT", category: "Education", organization: "Queensland University of Technology", details: ["Computer Science"], link: "/Bachelor.pdf" },
   { year: "2025", title: "Front-end Developer", category: "Experience", organization: "Bionauts, QUT", details: ["React", "Bootstrap", "Node.js"], link: null },
   { year: "2025", title: "Future Scope", category: "Award", organization: "Code Network Hackathon, QUT", details: ["JavaScript", "React", "Node.js", "AWS", "OpenAI API"], link: "https://www.qut.edu.au/about/faculty-of-science/insights/hacking-ambition-into-action-code-networks-2025-winter-hackathon" },
@@ -55,7 +56,7 @@ export const archiveProjects = [
 
 export const skillCategories = [
   { label: "Languages", skills: ["JavaScript", "TypeScript", "Java", "Python", "HTML", "CSS", "SQL"] },
-  { label: "Frameworks & Libraries", skills: ["React", "Node.js", "Express", "Bootstrap", "Tailwind CSS"] },
-  { label: "Tools & Platforms", skills: ["Git", "GitHub", "AWS", "Azure", "Jupyter Notebook", "Vercel", "Claude"] },
-  { label: "Databases", skills: ["PostgreSQL", "MySQL", "SQLite", "Azure Cosmos DB", "Maria DB"] },
+  { label: "Frameworks & Libraries", skills: ["React.js", "React Native", "Node.js", "Express", "Bootstrap", "Tailwind CSS"] },
+  { label: "Tools & Platforms", skills: ["Git", "GitHub", "AWS", "Azure", "Microsoft Power Platform", "Jupyter Notebook", "Vercel", "Claude"] },
+  { label: "Databases", skills: ["PostgreSQL", "MySQL", "SQLite", "Azure Cosmos DB", "Maria DB", "Microsoft Dataverse"] },
 ] as const;

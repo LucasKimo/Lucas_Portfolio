@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { archiveProjects } from "../data";
+import { milestones } from "../data";
 
 export default function MilestoneSection() {
   return (
@@ -20,7 +20,7 @@ export default function MilestoneSection() {
           </tr>
         </thead>
         <tbody>
-          {archiveProjects.map((project) => (
+          {milestones.map((project) => (
             <tr key={`${project.year}-${project.title}`}>
               <td className="archive-year">{project.year}</td>
               <td className="archive-name">{project.title}</td>

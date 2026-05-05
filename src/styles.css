@@ -725,7 +725,7 @@ a {
   font-size: 1.02rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-primary);
+  color: #ffffff;
 }
 
 .section-eyebrow::before {
@@ -772,7 +772,7 @@ a {
 }
 
 .archive-table th:first-child {
-  padding-left: 0;
+  padding-left: 16px;
 }
 
 .archive-table th:last-child {
@@ -796,7 +796,7 @@ a {
 }
 
 .archive-table td:first-child {
-  padding-left: 0;
+  padding-left: 16px;
 }
 
 .archive-table td:last-child {
@@ -877,7 +877,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-soft);
+  color: #ffffff;
 }
 
 .skill-list {
