@@ -55,8 +55,8 @@ export const milestones = [
 ] as const;
 
 export const skillCategories = [
-  { label: "Languages", skills: ["JavaScript", "TypeScript", "Java", "Python", "HTML", "CSS", "SQL"] },
-  { label: "Frameworks & Libraries", skills: ["React.js", "React Native", "Node.js", "Express", "Bootstrap", "Tailwind CSS"] },
-  { label: "Tools & Platforms", skills: ["Git", "GitHub", "AWS", "Azure", "Microsoft Power Platform", "Jupyter Notebook", "Vercel", "Claude"] },
+  { label: "Programming Languages", skills: ["JavaScript", "TypeScript", "Java", "Python", "C", "C#", "HTML", "CSS", "SQL"] },
+  { label: "Frameworks & Libraries", skills: ["React.js", "Bootstrap", "Vite", "Node.js", "Express.js", "React Native", "Swift", "Tailwind CSS", "Sklearn", "Keras", "TensorFlow", "Pandas", "NumPy", "Matplotlib", "Seaborn"] },
+  { label: "Tools & Platforms", skills: ["AWS", "Azure", "Linux", "Microsoft Power Platform", "Vercel", "Docker", "Vite", "Git", "GitHub", "API", "VS Code", "Intellij", "Google Colab", "Jupyter Notebook", "Ubuntu", "Claude AI", "CRM"] },
   { label: "Databases", skills: ["PostgreSQL", "MySQL", "SQLite", "Azure Cosmos DB", "Maria DB", "Microsoft Dataverse"] },
 ] as const;
