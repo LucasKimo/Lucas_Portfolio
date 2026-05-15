@@ -598,7 +598,6 @@ a {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   height: min(86vh, 960px);
-  cursor: none;
 }
 
 .featured-project-visual {
@@ -1486,7 +1485,7 @@ a {
 }
 
 .footer-copy {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: #fff;
   margin: 0;
 }

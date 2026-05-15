@@ -30,7 +30,7 @@ export default function AboutSection() {
           <p className="about-bio">
             I've always been a creative person who is curious about how things work.<br />
             I'm eager to surprise people with innovative tools and solve their problems.<br />
-            I challenge myself by training in an amateur boxing team with athletes and exploring nature.
+            I challenge myself by training in an amateur boxing team and exploring nature.
           </p>
         </div>
       </div>

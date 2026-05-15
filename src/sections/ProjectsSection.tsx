@@ -5,12 +5,21 @@ import { featuredProjects } from "../data";
 export default function ProjectsSection() {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const cursorRef = useRef<HTMLDivElement | null>(null);
+  const isHoveringRef = useRef(false);
 
   const activeProject = featuredProjects[activeProjectIndex];
 
   const handleProjectSelect = (index: number) => {
     if (index === activeProjectIndex) return;
     setActiveProjectIndex(index);
+    if (isHoveringRef.current) {
+      const newProject = featuredProjects[index];
+      if (newProject.link) {
+        cursorRef.current?.classList.add("is-visible");
+      } else {
+        cursorRef.current?.classList.remove("is-visible");
+      }
+    }
   };
 
   const handleVisualMouseMove = (e: MouseEvent) => {
@@ -21,11 +30,19 @@ export default function ProjectsSection() {
   };
 
   const handleVisualMouseEnter = () => {
-    cursorRef.current?.classList.add("is-visible");
+    isHoveringRef.current = true;
+    if (activeProject.link) cursorRef.current?.classList.add("is-visible");
   };
 
   const handleVisualMouseLeave = () => {
+    isHoveringRef.current = false;
     cursorRef.current?.classList.remove("is-visible");
+  };
+
+  const handleVisualClick = () => {
+    if (activeProject.link) {
+      window.open(activeProject.link, "_blank", "noreferrer");
+    }
   };
 
   return (
@@ -58,7 +75,12 @@ export default function ProjectsSection() {
           onMouseEnter={handleVisualMouseEnter}
           onMouseLeave={handleVisualMouseLeave}
         >
-          <div className="featured-project-visual" aria-hidden="true">
+          <div
+            className="featured-project-visual"
+            aria-hidden="true"
+            onClick={handleVisualClick}
+            style={activeProject.link ? { cursor: "none" } : undefined}
+          >
             <div className="visual-single-card">
               <img
                 src={activeProject.image}
