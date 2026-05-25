@@ -147,10 +147,8 @@ export default function Header({ isHeaderHidden, isCursorAtTop, isScrolledPastHe
             <HoverRollLink key={item} text={item} href="/archive" onClick={handleArchiveLinkClick} className="main-nav-link" enableWipe />
           ) : item === "Skills" ? (
             <HoverRollLink key={item} text={item} href="/skills" onClick={handleSkillsLinkClick} className="main-nav-link" enableWipe />
-          ) : item === "About" ? (
-            <HoverRollLink key={item} text={item} href="/about" onClick={handleAboutLinkClick} className="main-nav-link" enableWipe />
           ) : (
-            <HoverRollLink key={item} text={item} href={`/${item.toLowerCase()}`} className="main-nav-link" enableWipe />
+            <HoverRollLink key={item} text={item} href="/about" onClick={handleAboutLinkClick} className="main-nav-link" enableWipe />
           )
         )}
       </nav>
