@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/hoverrolllink.tsx","./src/wavebackground.tsx","./src/main.tsx"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/hoverrolllink.tsx","./src/wavebackground.tsx","./src/data.ts","./src/main.tsx","./src/components/footer.tsx","./src/components/header.tsx","./src/sections/aboutsection.tsx","./src/sections/herosection.tsx","./src/sections/milestonesection.tsx","./src/sections/projectssection.tsx","./src/sections/skillssection.tsx"],"version":"5.9.3"}
