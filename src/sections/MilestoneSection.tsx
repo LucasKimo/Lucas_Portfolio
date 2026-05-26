@@ -8,7 +8,8 @@ export default function MilestoneSection() {
         <p className="section-eyebrow" id="archive-title">Milestone</p>
         
       </div>
-      <table className="archive-table">
+      <div className="archive-table-wrapper">
+        <table className="archive-table">
         <thead>
           <tr>
             <th>Year</th>
@@ -43,7 +44,8 @@ export default function MilestoneSection() {
             </tr>
           ))}
         </tbody>
-      </table>
+        </table>
+      </div>
     </section>
   );
 }

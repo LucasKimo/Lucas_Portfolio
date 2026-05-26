@@ -38,8 +38,9 @@ export default function App() {
     if (!viewport || !shell || !content) return;
 
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-    if (mediaQuery.matches) {
+    if (mediaQuery.matches || isTouchDevice) {
       document.body.style.minHeight = "";
       content.style.transform = "";
       return;
